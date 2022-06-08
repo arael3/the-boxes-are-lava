@@ -9,9 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float meltingSpeed = 5;
     [SerializeField] float plashSizeSpeed = 5;
     [SerializeField] float damageFromLavaBox = 0.1f;
+    [SerializeField] GameObject steamAfterDamageParticleSystem;
 
     Rigidbody rb;
     SphereCollider sphereCollider;
+
     float playerSize;
     float plashSize;
 
@@ -65,6 +67,7 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.localScale.y > 0.2f)
             {
+                Instantiate(steamAfterDamageParticleSystem, transform.position, Quaternion.Euler(-90f, 0f, 0f));
                 playerSize = transform.localScale.y - damageFromLavaBox;
                 transform.localScale = new Vector3(playerSize, playerSize, playerSize);
             }
@@ -82,7 +85,7 @@ public class PlayerController : MonoBehaviour
         sphereCollider.radius = 0.01f;
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        if (transform.localScale.x < 0.75f)
+        if (transform.localScale.x < 0.7f)
         {
             plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
             transform.localScale = new Vector3(plashSize, 0.09f, plashSize);
