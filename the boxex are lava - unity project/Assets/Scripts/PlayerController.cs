@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float plashSizeSpeed = 5;
     [SerializeField] float damageFromLavaBox = 0.1f;
     [SerializeField] GameObject steamAfterDamageParticleSystem;
+    [SerializeField] AudioClip[] steamSoundsAfterDamage;
+
+    [HideInInspector]
+    public bool isLevelEnd = false;
 
     Rigidbody rb;
     SphereCollider sphereCollider;
@@ -19,9 +24,6 @@ public class PlayerController : MonoBehaviour
 
     float XAxis;
     float ZAxis;
-    
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
         rb.maxAngularVelocity = maxAngularVelocity;
+        transform.position = GameObject.Find("StartPoint").transform.position;
     }
 
     // Update is called once per frame
@@ -44,11 +47,16 @@ public class PlayerController : MonoBehaviour
             GameOver();
         }
 
-        if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f)
+        if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             ZAxis = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f)
+        if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             XAxis = Input.GetAxisRaw("Vertical");
+
+        if (transform.position.y < -10f)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     private void FixedUpdate()
@@ -63,10 +71,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Lava Box"))
+        if (collision.gameObject.CompareTag("LavaBox"))
         {
             if (transform.localScale.y > 0.2f)
             {
+                int random = Random.Range(0, steamSoundsAfterDamage.Length);
+                Debug.Log(random);
+                AudioSource.PlayClipAtPoint(steamSoundsAfterDamage[random], collision.contacts[0].point);
                 Instantiate(steamAfterDamageParticleSystem, transform.position, Quaternion.Euler(-90f, 0f, 0f));
                 playerSize = transform.localScale.y - damageFromLavaBox;
                 transform.localScale = new Vector3(playerSize, playerSize, playerSize);
@@ -90,7 +101,9 @@ public class PlayerController : MonoBehaviour
             plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
             transform.localScale = new Vector3(plashSize, 0.09f, plashSize);
         }
-
-        
+        else
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+        }
     }
 }
