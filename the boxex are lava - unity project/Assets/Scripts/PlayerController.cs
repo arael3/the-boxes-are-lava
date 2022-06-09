@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] float jumpForce = 100;
     [SerializeField] float speed = 5;
     [SerializeField] float maxAngularVelocity;
     [SerializeField] float meltingSpeed = 5;
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour
     float XAxis;
     float ZAxis;
 
+    bool jump = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.DrawRay(transform.position, Vector3.down, Color.red);
         if (transform.localScale.y > 0.1f)
         {
             playerSize = transform.localScale.y - Time.deltaTime / 100 * meltingSpeed;
@@ -51,6 +55,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             XAxis = Input.GetAxisRaw("Vertical");
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump = true;
+        }
+
         if (transform.position.y < -10f)
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -63,6 +72,32 @@ public class PlayerController : MonoBehaviour
             XAxis = 0;
             ZAxis = 0;
         }
+
+        if (jump)
+        {
+            if (IsGrounded())
+            {
+                rb.AddForce(new Vector3(0f, jumpForce, 0f));
+            }
+            jump = false;
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.gameObject.name == "Platform" && hit.distance <= GetComponent<SphereCollider>().radius)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -72,7 +107,6 @@ public class PlayerController : MonoBehaviour
             if (transform.localScale.y > 0.2f)
             {
                 int random = Random.Range(0, steamSoundsAfterDamage.Length);
-                Debug.Log(random);
                 AudioSource.PlayClipAtPoint(steamSoundsAfterDamage[random], collision.contacts[0].point);
                 Instantiate(steamAfterDamageParticleSystem, transform.position, Quaternion.Euler(-90f, 0f, 0f));
                 playerSize = transform.localScale.y - damageFromLavaBox;
@@ -82,7 +116,6 @@ public class PlayerController : MonoBehaviour
             {
                 PlayerPlashed();
             }
-                
         }
     }
 

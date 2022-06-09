@@ -1653,7 +1653,7 @@ GameObject:
   - component: {fileID: 1505992574}
   - component: {fileID: 1505992573}
   m_Layer: 0
-  m_Name: PlayerBody
+  m_Name: Player Mesh
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1748,9 +1748,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32f3e44f5e70b142b934e7ddea1e03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpForce: 100
   speed: 4
   maxAngularVelocity: 10
-  meltingSpeed: 5
+  meltingSpeed: 0.1
   plashSizeSpeed: 5
   damageFromLavaBox: 0.1
   steamAfterDamageParticleSystem: {fileID: 3865118693588204478, guid: e33dafe69f0772c4788e5fb17403db7c, type: 3}
