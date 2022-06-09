@@ -43,9 +43,7 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(playerSize, playerSize, playerSize);
         } 
         else
-        {
-            GameOver();
-        }
+            PlayerPlashed();
 
         if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             ZAxis = Input.GetAxisRaw("Horizontal");
@@ -54,9 +52,7 @@ public class PlayerController : MonoBehaviour
             XAxis = Input.GetAxisRaw("Vertical");
 
         if (transform.position.y < -10f)
-        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
     }
 
     private void FixedUpdate()
@@ -84,13 +80,13 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                GameOver();
+                PlayerPlashed();
             }
                 
         }
     }
 
-    void GameOver()
+    void PlayerPlashed()
     {
         rb.velocity = Vector3.zero;
         sphereCollider.radius = 0.01f;

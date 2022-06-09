@@ -4,17 +4,35 @@ using UnityEngine;
 
 public class LifeBonus : MonoBehaviour
 {
+    [SerializeField] float lifeBonusAmount = 0.8f;
+
     GameObject player;
+
+    SoundController soundController;
+
+    bool isTrigger = false;
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (isTrigger)
+        {
+            if (transform.localScale.x > 0.01f)
+            {
+                player.transform.localScale = new Vector3(player.transform.localScale.x + Time.deltaTime * lifeBonusAmount, player.transform.localScale.y + Time.deltaTime * lifeBonusAmount, player.transform.localScale.z + Time.deltaTime * lifeBonusAmount);
+
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, player.transform.localScale.y - Time.deltaTime * 2, player.transform.localScale.z - Time.deltaTime * 2);
+            }
+            else Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,8 +41,8 @@ public class LifeBonus : MonoBehaviour
         {
             if (player.transform.localScale.y < 1.6f)
             {
-                player.transform.localScale = new Vector3(player.transform.localScale.x + 0.2f, player.transform.localScale.y + 0.2f, player.transform.localScale.z + 0.2f);
-                Destroy(gameObject);
+                soundController.PlaySound(SoundController.SoundsList.LifeBonus);
+                isTrigger = true;
             }
         }
     }
