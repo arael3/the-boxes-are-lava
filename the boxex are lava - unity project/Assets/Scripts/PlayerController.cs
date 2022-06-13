@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float jumpForce = 100;
+    [SerializeField] float fallingVelocity;
+    [SerializeField] float maxfallingVelocity;
     [SerializeField] float speed = 5;
     [SerializeField] float maxAngularVelocity;
     [SerializeField] float meltingSpeed = 5;
@@ -31,6 +33,10 @@ public class PlayerController : MonoBehaviour
     float ZAxis;
 
     bool jump = false;
+    bool afterJump = false;
+    float timerAfterJump = 0.2f;
+    float timerAfterJumpReset = 0.2f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -85,12 +91,40 @@ public class PlayerController : MonoBehaviour
 
         if (jump)
         {
+            //Debug.Log("IsGrounded() = " + IsGrounded());
+
             if (IsGrounded())
             {
                 rb.AddForce(new Vector3(0f, jumpForce, 0f));
+                afterJump = true;
             }
             jump = false;
         }
+
+        if (afterJump)
+        {
+            timerAfterJump -= Time.deltaTime;
+
+            if (timerAfterJump < 0)
+            {
+                if (rb.velocity.y < 0)
+                {
+                    if (!IsGrounded())
+                    {
+                        if (rb.velocity.y > -maxfallingVelocity)
+                        {
+                            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y - fallingVelocity, rb.velocity.z);
+                        }
+                    }
+                    else 
+                    {
+                        timerAfterJump = timerAfterJumpReset;
+                        afterJump = false;
+                    }
+                }
+            }
+        }
+        
     }
 
     private void DropADroplet()
@@ -115,7 +149,9 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.gameObject.name == "Platform" && hit.distance <= GetComponent<SphereCollider>().radius)
+            //if (hit.transform.gameObject.name == "Platform" && hit.distance <= GetComponent<SphereCollider>().radius)
+            Debug.Log($"hit.distance = {hit.distance}  |  transform.localScale.x = {transform.localScale.x / 1.9f}");
+            if (hit.transform.gameObject.name == "Platform" && hit.distance <= transform.localScale.x / 1.9f)
                 return true;
             else
                 return false;
