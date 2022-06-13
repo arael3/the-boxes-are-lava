@@ -29,8 +29,8 @@ public class PlayerController : MonoBehaviour
     float plashSize;
     bool isPlashed = false;
 
-    float XAxis;
-    float ZAxis;
+    float vertical;
+    float horizontal;
 
     bool jump = false;
     bool afterJump = false;
@@ -61,10 +61,10 @@ public class PlayerController : MonoBehaviour
             PlayerPlashed();
 
         if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
-            ZAxis = Input.GetAxisRaw("Horizontal");
+            horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
-            XAxis = Input.GetAxisRaw("Vertical");
+            vertical = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -77,16 +77,24 @@ public class PlayerController : MonoBehaviour
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
         }
 
-        DropADroplet();
+        if (IsGrounded()) DropADroplet();
     }
 
     private void FixedUpdate()
     {
-        if (XAxis !=0 || ZAxis != 0)
+        if (vertical !=0 || horizontal != 0)
         {
-            rb.AddTorque(XAxis * speed, 0f, -ZAxis * speed);
-            XAxis = 0;
-            ZAxis = 0;
+            // Movement control by using rotation of player (sphere)
+            rb.AddTorque(vertical * speed, 0f, -horizontal * speed);
+
+            // Movement control when player don't touch ground
+            if (!IsGrounded())
+            {
+                rb.AddForce(horizontal * speed / 100, 0f, vertical * speed / 500, ForceMode.Impulse);
+            }
+
+            vertical = 0;
+            horizontal = 0;
         }
 
         if (jump)
@@ -149,8 +157,6 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            //if (hit.transform.gameObject.name == "Platform" && hit.distance <= GetComponent<SphereCollider>().radius)
-            Debug.Log($"hit.distance = {hit.distance}  |  transform.localScale.x = {transform.localScale.x / 1.9f}");
             if (hit.transform.gameObject.name == "Platform" && hit.distance <= transform.localScale.x / 1.9f)
                 return true;
             else
