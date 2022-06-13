@@ -513,7 +513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &284123167
 Transform:
   m_ObjectHideFlags: 0
@@ -1485,6 +1485,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 32715975}
     m_Modifications:
+    - target: {fileID: 994328988698962338, guid: b4c6b207e2280144c911566521c5e959, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 1766995302613599685, guid: b4c6b207e2280144c911566521c5e959, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1751,9 +1755,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 100
+  fallingVelocity: 0.5
+  maxfallingVelocity: 3
   speed: 4
   maxAngularVelocity: 10
-  meltingSpeed: 5
+  meltingSpeed: 2
   plashSizeSpeed: 5
   damageFromLavaBox: 0.1
   steamAfterDamageParticleSystem: {fileID: 3865118693588204478, guid: e33dafe69f0772c4788e5fb17403db7c, type: 3}
