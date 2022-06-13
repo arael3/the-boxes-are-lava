@@ -7,10 +7,12 @@ public class SoundController : MonoBehaviour
 {
     public enum SoundsList
     {
-        LifeBonus
+        LifeBonus, Win, Lose
     }
 
     public AudioClip lifeBonusAudio;
+    public AudioClip winAudio;
+    public AudioClip loseAudio;
 
     AudioSource audioSource;
 
@@ -41,6 +43,12 @@ public class SoundController : MonoBehaviour
         {
             case SoundsList.LifeBonus:
                 audioSource.PlayOneShot(lifeBonusAudio);
+                break;
+            case SoundsList.Win:
+                audioSource.PlayOneShot(winAudio);
+                break;
+            case SoundsList.Lose:
+                audioSource.PlayOneShot(loseAudio);
                 break;
             default:
                 break;

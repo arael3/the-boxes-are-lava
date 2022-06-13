@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float damageFromLavaBox = 0.1f;
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
+    [SerializeField] GameObject droplet;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -20,8 +21,11 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     SphereCollider sphereCollider;
 
+    SoundController soundController;
+
     float playerSize;
     float plashSize;
+    bool isPlashed = false;
 
     float XAxis;
     float ZAxis;
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour
         sphereCollider = GetComponent<SphereCollider>();
         rb.maxAngularVelocity = maxAngularVelocity;
         transform.position = GameObject.Find("StartPoint").transform.position;
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
 
     // Update is called once per frame
@@ -60,8 +65,13 @@ public class PlayerController : MonoBehaviour
             jump = true;
         }
 
-        if (transform.position.y < -10f)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (transform.position.y < -10f && !isPlashed) 
+        {
+            IsPlashed();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+        }
+
+        DropADroplet();
     }
 
     private void FixedUpdate()
@@ -81,6 +91,20 @@ public class PlayerController : MonoBehaviour
             }
             jump = false;
         }
+    }
+
+    private void DropADroplet()
+    {
+        int probabilityOfInstantiate = Random.Range(1, 10);
+        if (probabilityOfInstantiate == 1)
+        {
+            float randomX = Random.Range(-0.1f, 0.1f);
+            float randomZ = Random.Range(-0.1f, 0.1f);
+            GameObject dropletInstance = Instantiate(droplet, new Vector3(transform.position.x + randomX, transform.position.y - sphereCollider.radius * transform.localScale.y, transform.position.z + randomZ), Quaternion.Euler(Vector3.zero));
+            float randomScale = Random.Range(0.1f, 0.5f);
+            dropletInstance.transform.localScale = new Vector3(randomScale * transform.localScale.x, 0.01f, randomScale * transform.localScale.y);
+        }
+        
     }
 
     private bool IsGrounded()
@@ -119,8 +143,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void IsPlashed()
+    {
+        if (!isPlashed) soundController.PlaySound(SoundController.SoundsList.Lose);
+
+        isPlashed = true;
+    }
+
     void PlayerPlashed()
     {
+        IsPlashed();
+
         rb.velocity = Vector3.zero;
         sphereCollider.radius = 0.01f;
         transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -128,7 +161,7 @@ public class PlayerController : MonoBehaviour
         if (transform.localScale.x < 0.7f)
         {
             plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
-            transform.localScale = new Vector3(plashSize, 0.09f, plashSize);
+            transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
         }
         else
         {
