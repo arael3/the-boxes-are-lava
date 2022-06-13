@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     bool afterJump = false;
     float timerAfterJump = 0.2f;
     float timerAfterJumpReset = 0.2f;
+    float safeTimeAfterDamage = 0f;
+    float safeTimeAfterDamageRestart = 1f;
+    private bool damageTrigger = false;
 
 
     // Start is called before the first frame update
@@ -78,6 +81,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (IsGrounded()) DropADroplet();
+
+        if (damageTrigger && safeTimeAfterDamage > 0f)
+        {
+            safeTimeAfterDamage -= Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()
@@ -172,11 +180,17 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.localScale.y > 0.2f)
             {
-                int random = Random.Range(0, steamSoundsAfterDamage.Length);
-                AudioSource.PlayClipAtPoint(steamSoundsAfterDamage[random], collision.contacts[0].point);
-                Instantiate(steamAfterDamageParticleSystem, transform.position, Quaternion.Euler(-90f, 0f, 0f));
-                playerSize = transform.localScale.y - damageFromLavaBox;
-                transform.localScale = new Vector3(playerSize, playerSize, playerSize);
+                // After receiving damage from lava box Player is protected from further damages over time = safeTimeAfterDamage
+                if (safeTimeAfterDamage <= 0)
+                {
+                    safeTimeAfterDamage = safeTimeAfterDamageRestart;
+                    damageTrigger = true;
+                    int random = Random.Range(0, steamSoundsAfterDamage.Length);
+                    AudioSource.PlayClipAtPoint(steamSoundsAfterDamage[random], collision.contacts[0].point);
+                    Instantiate(steamAfterDamageParticleSystem, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+                    playerSize = transform.localScale.y - damageFromLavaBox;
+                    transform.localScale = new Vector3(playerSize, playerSize, playerSize);
+                }
             }
             else
             {
