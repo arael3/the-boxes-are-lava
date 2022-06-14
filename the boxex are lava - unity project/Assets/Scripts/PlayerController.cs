@@ -148,9 +148,7 @@ public class PlayerController : MonoBehaviour
         int probabilityOfInstantiate = Random.Range(1, 10);
         if (probabilityOfInstantiate == 1)
         {
-            float randomX = Random.Range(-0.1f, 0.1f);
-            float randomZ = Random.Range(-0.1f, 0.1f);
-            GameObject dropletInstance = Instantiate(droplet, new Vector3(transform.position.x + randomX, transform.position.y - sphereCollider.radius * transform.localScale.y, transform.position.z + randomZ), Quaternion.Euler(Vector3.zero));
+            GameObject dropletInstance = Instantiate(droplet, new Vector3(transform.position.x + Random.Range(-0.1f, 0.1f), transform.position.y - sphereCollider.radius * transform.localScale.y, transform.position.z + Random.Range(-0.1f, 0.1f)), Quaternion.Euler(0f, Random.Range(0, 180), 0f));
             float randomScale = Random.Range(0.1f, 0.5f);
             dropletInstance.transform.localScale = new Vector3(randomScale * transform.localScale.x, 0.01f, randomScale * transform.localScale.y);
         }

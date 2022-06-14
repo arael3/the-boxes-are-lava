@@ -6,6 +6,6 @@ public class DropletSteamController : MonoBehaviour
 {
     void Start()
     {
-        transform.localScale = new Vector3(transform.parent.localScale.x, transform.localScale.y, transform.parent.localScale.z);
+        transform.localScale = new Vector3(transform.parent.localScale.x, transform.localScale.y, transform.parent.localScale.z) / 1.5f;
     }
 }
