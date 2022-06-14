@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
+    [SerializeField] float acceleration = 1f;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -90,6 +91,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //rb.velocity *= acceleration;
+
         if (vertical !=0 || horizontal != 0)
         {
             // Movement control by using rotation of player (sphere)
