@@ -32,6 +32,16 @@ public class JumpingPlatform : MonoBehaviour
         {
             jumpPlatformActivated = true;
             player.GetComponent<Rigidbody>().AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
+
+            gameObject.GetComponent<Animator>().SetBool("playAnimation", true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            gameObject.GetComponent<Animator>().SetBool("playAnimation", false);
         }
     }
 }

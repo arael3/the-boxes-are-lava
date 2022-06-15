@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6565503413663873049}
   - component: {fileID: 6565503413663873048}
   - component: {fileID: 6565503413663873051}
+  - component: {fileID: 6401112152357845529}
   m_Layer: 0
   m_Name: In Mesh
   m_TagString: Untagged
@@ -109,6 +110,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 2.5
+--- !u!95 &6401112152357845529
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6565503413663873045}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 163dbc86baaa55f419e19fe1bb6672ba, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6565503413884360476
 GameObject:
   m_ObjectHideFlags: 0
