@@ -111,8 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationSpeedYAxis: 0.3
   accelerationTime: 0.4
-  accelerationAmount: 90
-  accelerationOnStart: 1.055
+  accelerationAmount: 100
+  accelerationOnStart: 1.04
 --- !u!1 &6195069821295309601
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
-    [SerializeField] float acceleration = 1f;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -41,8 +40,6 @@ public class PlayerController : MonoBehaviour
     float safeTimeAfterDamageRestart = 1f;
     private bool damageTrigger = false;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -52,7 +49,6 @@ public class PlayerController : MonoBehaviour
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Debug.DrawRay(transform.position, Vector3.down, Color.red);
@@ -91,8 +87,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //rb.velocity *= acceleration;
-
         if (vertical !=0 || horizontal != 0)
         {
             // Movement control by using rotation of player (sphere)
@@ -110,8 +104,6 @@ public class PlayerController : MonoBehaviour
 
         if (jump)
         {
-            //Debug.Log("IsGrounded() = " + IsGrounded());
-
             if (IsGrounded())
             {
                 rb.AddForce(new Vector3(0f, jumpForce, 0f));
@@ -158,7 +150,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
 
