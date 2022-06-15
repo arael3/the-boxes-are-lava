@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class JumpingPlatform : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] float jumpForce = 5f;
+
+    GameObject player;
+
+    public static bool jumpPlatformActivated = false;
+
     void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if (jumpPlatformActivated)
+        {
+            if (player.GetComponent<PlayerController>().IsGrounded())
+            {
+                jumpPlatformActivated = false;
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player") && player.GetComponent<PlayerController>().IsGrounded())
+        {
+            jumpPlatformActivated = true;
+            player.GetComponent<Rigidbody>().AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
+        }
     }
 }

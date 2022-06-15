@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             vertical = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !JumpingPlatform.jumpPlatformActivated)
         {
             jump = true;
         }
