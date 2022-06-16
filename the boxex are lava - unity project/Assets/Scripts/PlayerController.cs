@@ -158,10 +158,16 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.gameObject.name == "Platform" && hit.distance <= transform.localScale.x / 1.9f)
+            // hit.distance <= transform.localScale.x / 1.9f means that hit.distance should be <= sphere radius
+            if (hit.distance <= transform.localScale.x / 1.9f)
                 return true;
             else
+            {
+                Debug.Log("hit.transform.gameObject.name = " + hit.transform.gameObject.name);
+
                 return false;
+            }
+                
         }
         else
             return false;

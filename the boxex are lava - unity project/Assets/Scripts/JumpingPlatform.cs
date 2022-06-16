@@ -15,6 +15,11 @@ public class JumpingPlatform : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    private void Update()
+    {
+        //Debug.Log("IsGrounded() = " + player.GetComponent<PlayerController>().IsGrounded());
+    }
+
     void FixedUpdate()
     {
         if (jumpPlatformActivated)
@@ -28,6 +33,8 @@ public class JumpingPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("other.gameObject.tag = " + other.gameObject.tag + "  |  IsGrounded() = " + player.GetComponent<PlayerController>().IsGrounded());
+
         if (other.gameObject.CompareTag("Player") && player.GetComponent<PlayerController>().IsGrounded())
         {
             jumpPlatformActivated = true;
