@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
         }
 
-        if (IsGrounded()) DropADroplet();
+        //if (IsGrounded()) DropADroplet();
 
         if (damageTrigger && safeTimeAfterDamage > 0f)
         {
@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour
             // Movement control when player don't touch ground
             if (!IsGrounded())
             {
+                Debug.Log("IsGrounded() = " + IsGrounded());
                 rb.AddForce(horizontal * speed / 100, 0f, vertical * speed / 500, ForceMode.Impulse);
             }
 
@@ -182,12 +183,10 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             // hit.distance <= transform.localScale.x / 1.9f means that hit.distance should be <= sphere radius
-            if (hit.distance <= transform.localScale.x / 1.9f)
+            if (hit.distance <= transform.localScale.x / 1.8f)
                 return true;
             else
             {
-                Debug.Log("hit.transform.gameObject.name = " + hit.transform.gameObject.name);
-
                 return false;
             }
                 
