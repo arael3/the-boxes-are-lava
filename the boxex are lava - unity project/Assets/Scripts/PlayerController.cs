@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
+    [SerializeField] float shieldTimerOnStart = 5f;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -40,6 +41,10 @@ public class PlayerController : MonoBehaviour
     float safeTimeAfterDamageRestart = 1f;
     private bool damageTrigger = false;
 
+    public bool isShieldActive = false;
+    private float shieldTimer;
+    
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,6 +52,7 @@ public class PlayerController : MonoBehaviour
         rb.maxAngularVelocity = maxAngularVelocity;
         transform.position = GameObject.Find("StartPoint").transform.position;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        shieldTimer = shieldTimerOnStart;
     }
 
     void Update()
@@ -82,6 +88,17 @@ public class PlayerController : MonoBehaviour
         if (damageTrigger && safeTimeAfterDamage > 0f)
         {
             safeTimeAfterDamage -= Time.deltaTime;
+        }
+
+        if (isShieldActive)
+        {
+            shieldTimer -= Time.deltaTime;
+
+            if (shieldTimer < 0)
+            {
+                isShieldActive = false;
+                shieldTimer = shieldTimerOnStart;
+            }
         }
     }
 
@@ -175,7 +192,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("LavaBox"))
+        if (collision.gameObject.CompareTag("LavaBox") && !isShieldActive)
         {
             if (transform.localScale.y > 0.2f)
             {
