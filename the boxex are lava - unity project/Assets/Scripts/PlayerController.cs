@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
-    [SerializeField] float shieldTimerOnStart = 5f;
+    [SerializeField] float shieldTimerOnStart = 5.99f;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -41,10 +41,9 @@ public class PlayerController : MonoBehaviour
     float safeTimeAfterDamageRestart = 1f;
     private bool damageTrigger = false;
 
-    public bool isShieldActive = false;
-    private float shieldTimer;
+    [HideInInspector] public bool isShieldActive = false;
+    [HideInInspector] public float shieldTimer;
     
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -98,6 +97,7 @@ public class PlayerController : MonoBehaviour
             {
                 isShieldActive = false;
                 shieldTimer = shieldTimerOnStart;
+                GameObject.Find("shieldTimer").SetActive(false);
             }
         }
     }

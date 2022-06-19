@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShieldBonus : MonoBehaviour
 {
+    [SerializeField] GameObject shieldTimer;
     GameObject player;
     private bool isTrigger;
 
@@ -20,12 +21,9 @@ public class ShieldBonus : MonoBehaviour
         {
             if (transform.localScale.x > 0.01f)
             {
-                player.GetComponent<PlayerController>().isShieldActive = true;
-
                 transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, player.transform.localScale.y - Time.deltaTime * 2, player.transform.localScale.z - Time.deltaTime * 2);
             }
             else Destroy(transform.parent.gameObject);
-
         }
     }
 
@@ -34,6 +32,8 @@ public class ShieldBonus : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             isTrigger = true;
+            player.GetComponent<PlayerController>().isShieldActive = true;
+            shieldTimer.SetActive(true);
         }
     }
 }
