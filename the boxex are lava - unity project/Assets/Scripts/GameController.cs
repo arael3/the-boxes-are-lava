@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator NextLevel()
     {
-        soundController.PlaySound(SoundController.SoundsList.Win);
+        soundController.PlaySound("Win");
         player = GameObject.FindGameObjectWithTag("Player");
         player.GetComponent<PlayerController>().isLevelEnd = true;
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0.001f);

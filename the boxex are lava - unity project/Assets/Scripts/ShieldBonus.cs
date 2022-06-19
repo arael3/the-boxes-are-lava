@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class ShieldBonus : MonoBehaviour
 {
-    [SerializeField] GameObject shieldTimer;
-    GameObject player;
+    RawImage shieldTimerIcon;
+
+    PlayerController playerController;
+    SoundController soundController;
     private bool isTrigger;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        shieldTimerIcon = GameObject.Find("ShieldTimerIcon").GetComponent<RawImage>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
     }
 
     // Update is called once per frame
@@ -19,9 +25,9 @@ public class ShieldBonus : MonoBehaviour
     {
         if (isTrigger)
         {
-            if (transform.localScale.x > 0.01f)
+            if (transform.parent.localScale.x > 0.01f)
             {
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, player.transform.localScale.y - Time.deltaTime * 2, player.transform.localScale.z - Time.deltaTime * 2);
+                transform.parent.localScale = new Vector3(transform.parent.localScale.x - Time.deltaTime * 2, transform.parent.localScale.y - Time.deltaTime * 2, transform.parent.localScale.z - Time.deltaTime * 2);
             }
             else Destroy(transform.parent.gameObject);
         }
@@ -32,8 +38,10 @@ public class ShieldBonus : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             isTrigger = true;
-            player.GetComponent<PlayerController>().isShieldActive = true;
-            shieldTimer.SetActive(true);
+            soundController.PlaySound("Shield");
+            playerController.shieldTimer = playerController.shieldTimerOnStart;
+            playerController.isShieldActive = true;
+            shieldTimerIcon.enabled = true;
         }
     }
 }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject steamAfterDamageParticleSystem;
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
-    [SerializeField] float shieldTimerOnStart = 5.99f;
+    [SerializeField] public float shieldTimerOnStart = 5.99f;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -43,7 +45,9 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool isShieldActive = false;
     [HideInInspector] public float shieldTimer;
-    
+
+    RawImage shieldTimerIcon;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -52,6 +56,8 @@ public class PlayerController : MonoBehaviour
         transform.position = GameObject.Find("StartPoint").transform.position;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         shieldTimer = shieldTimerOnStart;
+
+        shieldTimerIcon = GameObject.Find("ShieldTimerIcon").GetComponent<RawImage>();
     }
 
     void Update()
@@ -97,7 +103,7 @@ public class PlayerController : MonoBehaviour
             {
                 isShieldActive = false;
                 shieldTimer = shieldTimerOnStart;
-                GameObject.Find("shieldTimer").SetActive(false);
+                shieldTimerIcon.GetComponent<RawImage>().enabled = false;
             }
         }
     }
@@ -217,7 +223,7 @@ public class PlayerController : MonoBehaviour
 
     void IsPlashed()
     {
-        if (!isPlashed) soundController.PlaySound(SoundController.SoundsList.Lose);
+        if (!isPlashed) soundController.PlaySound("Lose");
 
         isPlashed = true;
     }

@@ -59,6 +59,8 @@ public class AccelerationPlatform : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             isAccelerate = true;
+            GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>().PlaySound("Acceleration");
+            Debug.Log(other.gameObject.tag);
         }
     }
 

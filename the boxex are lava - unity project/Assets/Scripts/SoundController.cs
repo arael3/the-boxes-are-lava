@@ -1,20 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[RequireComponent(typeof(AudioSource))]
 public class SoundController : MonoBehaviour
 {
-    public enum SoundsList
-    {
-        LifeBonus, Win, Lose
-    }
-
-    public AudioClip lifeBonusAudio;
-    public AudioClip winAudio;
-    public AudioClip loseAudio;
-
-    AudioSource audioSource;
+    public Sound[] sounds;
 
     private void Awake()
     {
@@ -22,36 +13,34 @@ public class SoundController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        foreach (Sound sound in sounds)
+        {
+            sound.source = gameObject.AddComponent<AudioSource>();
+            sound.source.clip = sound.clip;
+
+            sound.source.volume = sound.volume;
+            sound.source.pitch = sound.pitch;
+            sound.source.spatialBlend = sound.spatialBlend;
+            sound.source.loop = sound.loop;
+        }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
         DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlaySound(string name)
     {
-        
-    }
+        Sound sound = Array.Find(sounds, sound => sound.name == name);
 
-    public void PlaySound(SoundsList soundName)
-    {
-        switch (soundName)
+        if (sound == null)
         {
-            case SoundsList.LifeBonus:
-                audioSource.PlayOneShot(lifeBonusAudio);
-                break;
-            case SoundsList.Win:
-                audioSource.PlayOneShot(winAudio);
-                break;
-            case SoundsList.Lose:
-                audioSource.PlayOneShot(loseAudio);
-                break;
-            default:
-                break;
+            Debug.LogWarning("Sound: \"" + name + "\" not found!");
+            return;
         }
+
+        sound.source.Play();
     }
 }

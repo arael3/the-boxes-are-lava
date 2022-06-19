@@ -29,7 +29,7 @@ public class LifeBonus : MonoBehaviour
             {
                 player.transform.localScale = new Vector3(player.transform.localScale.x + Time.deltaTime * lifeBonusAmount, player.transform.localScale.y + Time.deltaTime * lifeBonusAmount, player.transform.localScale.z + Time.deltaTime * lifeBonusAmount);
 
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, player.transform.localScale.y - Time.deltaTime * 2, player.transform.localScale.z - Time.deltaTime * 2);
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, transform.localScale.z - Time.deltaTime * 2);
             }
             else Destroy(gameObject);
         }
@@ -41,7 +41,7 @@ public class LifeBonus : MonoBehaviour
         {
             if (player.transform.localScale.y < 1.5f)
             {
-                soundController.PlaySound(SoundController.SoundsList.LifeBonus);
+                soundController.PlaySound("LifeBonus");
                 isTrigger = true;
             }
         }

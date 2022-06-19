@@ -13,12 +13,17 @@ public class ShieldTimerUI : MonoBehaviour
     {
         tmp = GetComponent<TextMeshProUGUI>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        tmp.text = "";
     }
 
     // Update is called once per frame
     void Update()
     {
-        time = (int)playerController.shieldTimer;
-        tmp.text = time.ToString();
+        if (playerController.isShieldActive)
+        {
+            time = (int)playerController.shieldTimer;
+            tmp.text = time.ToString();
+        }
+        else tmp.text = "";
     }
 }
