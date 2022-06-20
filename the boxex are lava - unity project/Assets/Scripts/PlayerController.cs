@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float fallingVelocity;
     [SerializeField] float maxfallingVelocity;
     [SerializeField] float speed = 5;
+    [SerializeField] public float maxVelocity = 10f;
     [SerializeField] float maxAngularVelocity;
     [SerializeField] float meltingSpeed = 5;
     [SerializeField] float plashSizeSpeed = 5;
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
         rb.maxAngularVelocity = maxAngularVelocity;
-        transform.position = GameObject.Find("StartPoint").transform.position;
+        //transform.position = GameObject.Find("StartPoint").transform.position;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         shieldTimer = shieldTimerOnStart;
 
@@ -158,6 +159,26 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if (rb.velocity.x > maxVelocity)
+        {
+            rb.velocity = new Vector3(maxVelocity - 0.01f, rb.velocity.y, rb.velocity.z);
+        }
+
+        if (rb.velocity.x < -maxVelocity)
+        {
+            rb.velocity = new Vector3(-maxVelocity + 0.01f, rb.velocity.y, rb.velocity.z);
+        }
+
+        if (rb.velocity.z > maxVelocity)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, maxVelocity - 0.01f);
+        }
+        
+        if (rb.velocity.z < -maxVelocity)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, -maxVelocity + 0.01f);
         }
         
     }
