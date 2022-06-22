@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
         }
 
-        //if (IsGrounded()) DropADroplet();
+        if (IsGrounded()) DropADroplet();
 
         if (damageTrigger && safeTimeAfterDamage > 0f)
         {
