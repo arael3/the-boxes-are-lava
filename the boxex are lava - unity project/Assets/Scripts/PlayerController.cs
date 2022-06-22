@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip[] steamSoundsAfterDamage;
     [SerializeField] GameObject droplet;
     [SerializeField] public float shieldTimerOnStart = 5.99f;
+    [SerializeField] Joystick joystick;
 
     [HideInInspector]
     public bool isLevelEnd = false;
@@ -36,6 +37,11 @@ public class PlayerController : MonoBehaviour
     float vertical;
     float horizontal;
 
+    float horizontalMovementInput;
+    float verticalMovementInput;
+
+
+    //float jump;
     bool jump = false;
     bool afterJump = false;
     float timerAfterJump = 0.2f;
@@ -48,6 +54,24 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float shieldTimer;
 
     RawImage shieldTimerIcon;
+
+    // Movement control with using New Input System module
+    //PlayerActionControls playerActionControls;
+
+    private void Awake()
+    {
+        //playerActionControls = new PlayerActionControls();
+    }
+
+    private void OnEnable()
+    {
+        //playerActionControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        //playerActionControls.Disable();
+    }
 
     void Start()
     {
@@ -63,6 +87,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Movement control with using New Input System module
+        // Read the movement value
+        //horizontalMovementInput = playerActionControls.Land.Horizontal.ReadValue<float>();
+        //verticalMovementInput = playerActionControls.Land.Vertical.ReadValue<float>();
+
+        // Read the jump value
+        //jump = playerActionControls.Land.Jump.ReadValue<float>();
+
+        // Move the player
+        //transform.position += new Vector3(horizontalMovementInput * speed * Time.deltaTime, 0f, verticalMovementInput * speed * Time.deltaTime);
+
         //Debug.DrawRay(transform.position, Vector3.down, Color.red);
         if (transform.localScale.y > 0.1f)
         {
@@ -72,6 +107,7 @@ public class PlayerController : MonoBehaviour
         else
             PlayerPlashed();
 
+        // Keyboard control
         if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -82,6 +118,13 @@ public class PlayerController : MonoBehaviour
         {
             jump = true;
         }
+
+        // Touch control
+        if (Mathf.Abs(joystick.Horizontal) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
+            horizontal = joystick.Horizontal;
+
+        if (Mathf.Abs(joystick.Vertical) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
+            vertical = joystick.Vertical;
 
         if (transform.position.y < -10f && !isPlashed) 
         {
@@ -111,7 +154,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (vertical !=0 || horizontal != 0)
+        if (vertical != 0 || horizontal != 0)
         {
             // Movement control by using rotation of player (sphere)
             rb.AddTorque(vertical * speed, 0f, -horizontal * speed);
@@ -127,6 +170,7 @@ public class PlayerController : MonoBehaviour
             horizontal = 0;
         }
 
+        //if (jump != 0)
         if (jump)
         {
             if (IsGrounded())
@@ -134,6 +178,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector3(0f, jumpForce, 0f));
                 afterJump = true;
             }
+            //jump = 0;
             jump = false;
         }
 
@@ -181,6 +226,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, -maxVelocity + 0.01f);
         }
         
+    }
+
+    public void IsJump()
+    {
+        jump = true;
     }
 
     private void DropADroplet()
