@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class NextLevel : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Points points;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        points = GameObject.Find("Points Text").GetComponent<Points>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("NextLevel");
+            points.addPointsForTime = true;
+
+            //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("NextLevel");
         }
     }
 }
