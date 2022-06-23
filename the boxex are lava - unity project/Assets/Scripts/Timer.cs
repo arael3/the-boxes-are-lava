@@ -12,13 +12,13 @@ public class Timer : MonoBehaviour
     void Start()
     {
         timeText = GetComponent<TextMeshProUGUI>();
-        time = 0;
+        time = 100;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
+        time -= Time.deltaTime;
         timeInt = (int)time;
         timeText.text = timeInt.ToString();
     }

@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float shieldTimerOnStart = 5.99f;
     [SerializeField] Joystick joystick;
 
+    [SerializeField] [Range(0f, 1f)] float moveProportionSet = 0.5f;
+
     [HideInInspector]
     public bool isLevelEnd = false;
 
@@ -54,6 +56,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float shieldTimer;
 
     RawImage shieldTimerIcon;
+    
 
     // Movement control with using New Input System module
     //PlayerActionControls playerActionControls;
@@ -156,18 +159,7 @@ public class PlayerController : MonoBehaviour
     {
         if (vertical != 0 || horizontal != 0)
         {
-            // Movement control by using rotation of player (sphere)
-            rb.AddTorque(vertical * speed, 0f, -horizontal * speed);
-
-            // Movement control when player don't touch ground
-            if (!IsGrounded())
-            {
-                Debug.Log("IsGrounded() = " + IsGrounded());
-                rb.AddForce(horizontal * speed / 100, 0f, vertical * speed / 500, ForceMode.Impulse);
-            }
-
-            vertical = 0;
-            horizontal = 0;
+            Move();
         }
 
         //if (jump != 0)
@@ -226,6 +218,27 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, -maxVelocity + 0.01f);
         }
         
+    }
+
+    private void Move()
+    {
+        // Movement control by using rotation and force in the right proportions
+        float addTorquePart = 1 - moveProportionSet;
+        float addForcePart = 1 - addTorquePart;
+
+        rb.AddTorque(vertical * speed * addTorquePart, 0f, -horizontal * speed * addTorquePart);
+        
+        if (IsGrounded())
+        {
+            rb.AddForce(horizontal * speed / 10 * addForcePart, 0f, vertical * speed / 10 * addForcePart, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddForce(horizontal * speed / 100, 0f, vertical * speed / 100, ForceMode.Impulse);
+        }
+
+        vertical = 0;
+        horizontal = 0;
     }
 
     public void IsJump()
