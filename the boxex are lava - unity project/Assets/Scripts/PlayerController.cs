@@ -56,7 +56,19 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float shieldTimer;
 
     RawImage shieldTimerIcon;
-    
+
+    JumpButton jumpButton;
+    private bool isMoveHorizontal = false;
+    private float actualAxisX;
+
+    float portionToMoveX = 1.5f;
+    float portionToMoveXRestart = 1.5f;
+    private float positionXToMove;
+    private float multiplierX;
+    private bool turnRight;
+    private bool turnLeft;
+
+    [SerializeField] float decreasePortionBy = 0.05f;
 
     // Movement control with using New Input System module
     //PlayerActionControls playerActionControls;
@@ -86,6 +98,8 @@ public class PlayerController : MonoBehaviour
         shieldTimer = shieldTimerOnStart;
 
         shieldTimerIcon = GameObject.Find("ShieldTimerIcon").GetComponent<RawImage>();
+
+        jumpButton = GameObject.Find("Jump Button").GetComponent<JumpButton>();
     }
 
     void Update()
@@ -111,13 +125,17 @@ public class PlayerController : MonoBehaviour
             PlayerPlashed();
 
         // Keyboard control
-        if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
+        //if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
+        if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
+        {
             horizontal = Input.GetAxisRaw("Horizontal");
+            Debug.Log("horizontal = " + horizontal);
+        }
 
         if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             vertical = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || jumpButton.isButtonPressed)
         {
             jump = true;
         }
@@ -157,9 +175,20 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (vertical != 0 || horizontal != 0)
+        if (vertical != 0)
         {
+            //Debug.Log("vertical = " + vertical + "horizontal = " + horizontal);
             Move();
+        }
+
+        if (horizontal != 0)
+        {
+            MoveHorizontalInitial();
+        }
+
+        if (isMoveHorizontal)
+        {
+            MoveHorizontal();
         }
 
         //if (jump != 0)
@@ -226,19 +255,74 @@ public class PlayerController : MonoBehaviour
         float addTorquePart = 1 - moveProportionSet;
         float addForcePart = 1 - addTorquePart;
 
-        rb.AddTorque(vertical * speed * addTorquePart, 0f, -horizontal * speed * addTorquePart);
+        rb.AddTorque(vertical * speed * addTorquePart, 0f, -horizontal/2 * speed * addTorquePart);
         
         if (IsGrounded())
         {
-            rb.AddForce(horizontal * speed / 10 * addForcePart, 0f, vertical * speed / 10 * addForcePart, ForceMode.Impulse);
+            rb.AddForce(horizontal/2 * speed / 10 * addForcePart, 0f, vertical * speed / 10 * addForcePart, ForceMode.Impulse);
         }
         else
         {
-            rb.AddForce(horizontal * speed / 100, 0f, vertical * speed / 100, ForceMode.Impulse);
+            rb.AddForce(horizontal/2 * speed / 100, 0f, vertical * speed / 100, ForceMode.Impulse);
         }
 
         vertical = 0;
+        
+    }
+
+    private void MoveHorizontalInitial()
+    {
+        actualAxisX = transform.position.x;
+
+        if (actualAxisX == 0)
+        {
+            multiplierX = 0;
+        }
+        else multiplierX = actualAxisX / portionToMoveX;
+
+        if (horizontal == 1)
+        {
+            positionXToMove = multiplierX * portionToMoveX + portionToMoveX;
+            turnRight = true;
+            turnLeft = false;
+        }
+        else if (horizontal == -1)
+        {
+            positionXToMove = multiplierX * portionToMoveX - portionToMoveX;
+            turnLeft = true;
+            turnRight = false;
+        }
+
+        isMoveHorizontal = true;
+
         horizontal = 0;
+    }
+
+    private void MoveHorizontal()
+    {
+        if (IsGrounded())
+        {
+            if (Mathf.Abs(Mathf.Abs(transform.position.x) - Mathf.Abs(positionXToMove)) > decreasePortionBy + 0.01f)
+            {
+                //portionToMoveX -= decreasePortionBy;
+
+                if (turnRight)
+                {
+                    transform.Translate(new Vector3(decreasePortionBy, 0f, 0f), Space.World);
+                }
+                else if (turnLeft)
+                {
+                    transform.Translate(new Vector3(-decreasePortionBy, 0f, 0f), Space.World);
+                }
+            }
+            else
+            {
+                transform.position = new Vector3(positionXToMove, transform.position.y, transform.position.z);
+
+                rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
+                isMoveHorizontal = false;
+            }
+        }
     }
 
     public void IsJump()
