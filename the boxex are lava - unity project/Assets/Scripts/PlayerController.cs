@@ -57,11 +57,13 @@ public class PlayerController : MonoBehaviour
 
     RawImage shieldTimerIcon;
 
-    JumpButton jumpButton;
+    TurnLeftButton turnLeftButton;
+    TurnRightButton turnRightButton;
+
     private bool isMoveHorizontal = false;
     private float actualAxisX;
 
-    float portionToMoveX = 1.5f;
+    [SerializeField] float portionToMoveX = 1.5f;
     float portionToMoveXRestart = 1.5f;
     private float positionXToMove;
     private float multiplierX;
@@ -72,6 +74,8 @@ public class PlayerController : MonoBehaviour
 
     // Movement control with using New Input System module
     //PlayerActionControls playerActionControls;
+
+    int licznik = 0;
 
     private void Awake()
     {
@@ -99,7 +103,8 @@ public class PlayerController : MonoBehaviour
 
         shieldTimerIcon = GameObject.Find("ShieldTimerIcon").GetComponent<RawImage>();
 
-        jumpButton = GameObject.Find("Jump Button").GetComponent<JumpButton>();
+        turnLeftButton = GameObject.Find("Turn Left Button").GetComponent<TurnLeftButton>();
+        turnRightButton = GameObject.Find("Turn Right Button").GetComponent<TurnRightButton>();
     }
 
     void Update()
@@ -129,13 +134,29 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
         {
             horizontal = Input.GetAxisRaw("Horizontal");
-            Debug.Log("horizontal = " + horizontal);
         }
 
-        if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
-            vertical = Input.GetAxisRaw("Vertical");
+        if (turnLeftButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
+        {
+            horizontal = -1;
+            turnLeftButton.isButtonPressed = false;
+        }
 
-        if (Input.GetKeyDown(KeyCode.Space) || jumpButton.isButtonPressed)
+        if (turnRightButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
+        {
+            horizontal = 1;
+            turnRightButton.isButtonPressed = false;
+        }
+
+        //if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
+        if (transform.localScale.y > 0.1f && !isLevelEnd)
+        {
+            //vertical = Input.GetAxisRaw("Vertical");
+            vertical = 1;
+        }
+            
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             jump = true;
         }

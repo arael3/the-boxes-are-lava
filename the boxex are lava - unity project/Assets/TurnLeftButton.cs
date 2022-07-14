@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class TurnLeftButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [HideInInspector] public bool isButtonPressed;
+    bool isButtonRelease = true;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        isButtonPressed = true;
-        Debug.Log("isButtonPressed = " + isButtonPressed);
+        if (isButtonRelease)
+        {
+            isButtonRelease = false;
+            isButtonPressed = true;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        isButtonPressed = false;
-        Debug.Log("isButtonPressed = " + isButtonPressed);
+        isButtonRelease = true;
     }
 }
