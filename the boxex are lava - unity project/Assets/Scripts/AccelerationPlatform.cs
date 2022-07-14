@@ -60,7 +60,6 @@ public class AccelerationPlatform : MonoBehaviour
         {
             isAccelerate = true;
             GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>().PlaySound("Acceleration");
-            Debug.Log(other.gameObject.tag);
         }
     }
 

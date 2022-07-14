@@ -76,6 +76,10 @@ public class PlayerController : MonoBehaviour
     //PlayerActionControls playerActionControls;
 
     int licznik = 0;
+    private float initialPortionToMove = 0;
+    private int toMoveCounter = 0;
+
+    JumpingPlatform jumpingPlatform;
 
     private void Awake()
     {
@@ -109,6 +113,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log("jumpPlatformActivated = " + JumpingPlatform.jumpPlatformActivated + "  IsGrounded() = " + IsGrounded());
+        
         // Movement control with using New Input System module
         // Read the movement value
         //horizontalMovementInput = playerActionControls.Land.Horizontal.ReadValue<float>();
@@ -198,8 +204,7 @@ public class PlayerController : MonoBehaviour
     {
         if (vertical != 0)
         {
-            //Debug.Log("vertical = " + vertical + "horizontal = " + horizontal);
-            Move();
+            MoveVertical();
         }
 
         if (horizontal != 0)
@@ -288,28 +293,37 @@ public class PlayerController : MonoBehaviour
         }
 
         vertical = 0;
-        
+    }
+
+    private void MoveVertical()
+    {
+        // Movement control by using rotation and force in the right proportions
+        float addTorquePart = 1 - moveProportionSet;
+        float addForcePart = 1 - addTorquePart;
+
+        rb.AddTorque(vertical * speed * addTorquePart, 0f, 0f);
+
+        if (IsGrounded())
+        {
+            rb.AddForce(0f, 0f, vertical * speed / 10 * addForcePart, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddForce(0f, 0f, vertical * speed / 100, ForceMode.Impulse);
+        }
+
+        vertical = 0;
     }
 
     private void MoveHorizontalInitial()
     {
-        actualAxisX = transform.position.x;
-
-        if (actualAxisX == 0)
-        {
-            multiplierX = 0;
-        }
-        else multiplierX = actualAxisX / portionToMoveX;
-
         if (horizontal == 1)
         {
-            positionXToMove = multiplierX * portionToMoveX + portionToMoveX;
             turnRight = true;
             turnLeft = false;
         }
         else if (horizontal == -1)
         {
-            positionXToMove = multiplierX * portionToMoveX - portionToMoveX;
             turnLeft = true;
             turnRight = false;
         }
@@ -321,12 +335,14 @@ public class PlayerController : MonoBehaviour
 
     private void MoveHorizontal()
     {
-        if (IsGrounded())
+        if (IsGrounded() || transform.position.y > 0)
         {
-            if (Mathf.Abs(Mathf.Abs(transform.position.x) - Mathf.Abs(positionXToMove)) > decreasePortionBy + 0.01f)
-            {
-                //portionToMoveX -= decreasePortionBy;
+            float moduloPositionX = transform.position.x % portionToMoveX;
 
+            initialPortionToMove += decreasePortionBy;
+
+            if (Mathf.Abs(moduloPositionX) > decreasePortionBy || initialPortionToMove < decreasePortionBy * 3)
+            {
                 if (turnRight)
                 {
                     transform.Translate(new Vector3(decreasePortionBy, 0f, 0f), Space.World);
@@ -338,12 +354,11 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                transform.position = new Vector3(positionXToMove, transform.position.y, transform.position.z);
-
                 rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
                 isMoveHorizontal = false;
-            }
-        }
+                initialPortionToMove = 0;
+            } 
+        }   
     }
 
     public void IsJump()
