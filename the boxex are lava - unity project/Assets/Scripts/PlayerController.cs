@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] [Range(0f, 1f)] float moveProportionSet = 0.5f;
 
+    [SerializeField] float horizontalSpeed = 1f;
+    [SerializeField] float staticHorizontalSpeed = 1f;
+
     [HideInInspector]
     public bool isLevelEnd = false;
 
@@ -80,6 +83,12 @@ public class PlayerController : MonoBehaviour
     private int toMoveCounter = 0;
 
     JumpingPlatform jumpingPlatform;
+
+    float moduloPositionX;
+    [SerializeField] float maxHorizontalVelocity = 1f;
+    private int portionsOfAddForce;
+    [SerializeField] int maxPortionsOfAddForce = 30;
+    private bool ifDontReachedPositionX;
 
     private void Awake()
     {
@@ -174,6 +183,16 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(joystick.Vertical) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
             vertical = joystick.Vertical;
 
+        if (horizontal != 0)
+        {
+            MoveHorizontalInitial();
+        }
+
+        if (isMoveHorizontal)
+        {
+            IfDontReachedPositionX();
+        }
+        
         if (transform.position.y < -10f && !isPlashed) 
         {
             IsPlashed();
@@ -209,12 +228,12 @@ public class PlayerController : MonoBehaviour
 
         if (horizontal != 0)
         {
-            MoveHorizontalInitial();
+            //MoveHorizontalInitial();
         }
 
         if (isMoveHorizontal)
         {
-            MoveHorizontal();
+            MoveHorizontalRigidbody();
         }
 
         //if (jump != 0)
@@ -337,7 +356,7 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded() || transform.position.y > 0)
         {
-            float moduloPositionX = transform.position.x % portionToMoveX;
+            moduloPositionX = transform.position.x % portionToMoveX;
 
             initialPortionToMove += decreasePortionBy;
 
@@ -359,6 +378,55 @@ public class PlayerController : MonoBehaviour
                 initialPortionToMove = 0;
             } 
         }   
+    }
+
+    private void MoveHorizontalRigidbody()
+    {
+        if (IsGrounded() || transform.position.y > 0)
+        {
+            moduloPositionX = transform.position.x % portionToMoveX;
+
+            initialPortionToMove += decreasePortionBy;
+
+            if (ifDontReachedPositionX || initialPortionToMove < decreasePortionBy * 4)
+            {
+                if (turnRight)
+                {
+                    transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
+
+                    if (portionsOfAddForce < maxPortionsOfAddForce)
+                    {
+                        //Debug.Log("rb.velocity.x = " + rb.velocity.x);
+                        portionsOfAddForce++;
+                        rb.AddForce(horizontalSpeed * Time.deltaTime, 0f, 0f, ForceMode.Impulse);
+                    }
+                }
+                else if (turnLeft)
+                {
+                    transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
+                    //if (Mathf.Abs(rb.velocity.x) < maxHorizontalVelocity)
+                    if (portionsOfAddForce < maxPortionsOfAddForce)
+                    {
+                        portionsOfAddForce++;
+                        rb.AddForce(-horizontalSpeed * Time.deltaTime, 0f, 0f, ForceMode.Impulse);
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Zero rb.velocity.x");
+                rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
+                isMoveHorizontal = false;
+                initialPortionToMove = 0;
+                portionsOfAddForce = 0;
+            }
+        }
+    }
+
+    private bool IfDontReachedPositionX()
+    {
+        if (Mathf.Abs(moduloPositionX) > decreasePortionBy) return ifDontReachedPositionX = true;
+        else return ifDontReachedPositionX = false;
     }
 
     public void IsJump()

@@ -1423,7 +1423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &284123167
 Transform:
   m_ObjectHideFlags: 0
@@ -14024,11 +14024,15 @@ MonoBehaviour:
   shieldTimerOnStart: 5.99
   joystick: {fileID: 0}
   moveProportionSet: 0.5
+  horizontalSpeed: 0
+  staticHorizontalSpeed: 1
   isLevelEnd: 0
   isShieldActive: 0
   shieldTimer: 0
   portionToMoveX: 1.5
   decreasePortionBy: 0.05
+  maxHorizontalVelocity: 1
+  maxPortionsOfAddForce: 30
 --- !u!54 &867427017
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17323,11 +17327,15 @@ MonoBehaviour:
   shieldTimerOnStart: 5.99
   joystick: {fileID: 60857472}
   moveProportionSet: 0.9
+  horizontalSpeed: 0.1
+  staticHorizontalSpeed: 90
   isLevelEnd: 0
   isShieldActive: 0
   shieldTimer: 0
   portionToMoveX: 1.5
   decreasePortionBy: 0.05
+  maxHorizontalVelocity: 1.5
+  maxPortionsOfAddForce: 1
 --- !u!54 &1505992574
 Rigidbody:
   m_ObjectHideFlags: 0
