@@ -90,6 +90,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int maxPortionsOfAddForce = 30;
     private bool ifDontReachedPositionX;
 
+    int decreasePortionByMultiplier;
+
     private void Awake()
     {
         //playerActionControls = new PlayerActionControls();
@@ -191,6 +193,15 @@ public class PlayerController : MonoBehaviour
         if (isMoveHorizontal)
         {
             IfDontReachedPositionX();
+        }
+        else
+        {
+            IfDontReachedPositionX();
+
+           if (ifDontReachedPositionX)
+           {
+                AutoReachThePositionX();
+           }
         }
         
         if (transform.position.y < -10f && !isPlashed) 
@@ -384,11 +395,11 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded() || transform.position.y > 0)
         {
-            moduloPositionX = transform.position.x % portionToMoveX;
+            //moduloPositionX = transform.position.x % portionToMoveX;
 
             initialPortionToMove += decreasePortionBy;
 
-            if (ifDontReachedPositionX || initialPortionToMove < decreasePortionBy * 4)
+            if (ifDontReachedPositionX || initialPortionToMove < decreasePortionBy * 5)
             {
                 if (turnRight)
                 {
@@ -423,9 +434,71 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void AutoReachThePositionX()
+    {
+        Debug.Log("AutoReachThePositionX()");
+
+        if (IsGrounded() || transform.position.y > 0)
+        {
+            float multiplesOfThePortionToMove = Mathf.Abs(transform.position.x / portionToMoveX);
+
+            while (multiplesOfThePortionToMove > 1f)
+            {
+                multiplesOfThePortionToMove -= 1f;
+            }
+
+            //moduloPositionX = transform.position.x % portionToMoveX;
+
+            //initialPortionToMove += decreasePortionBy;
+
+            //if (ifDontReachedPositionX || initialPortionToMove < decreasePortionBy * 5)
+            //{
+            if (transform.position.x > 0)
+            {
+                if (multiplesOfThePortionToMove > 0.5f)
+                {
+                    transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                }
+                else
+                {
+                    transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                }
+            }
+            else 
+            {
+                if (multiplesOfThePortionToMove < 0.5f)
+                {
+                    transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                }
+                else
+                {
+                    transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                }
+            }
+            
+            //}
+            //else
+            //{
+            //    Debug.Log("Zero rb.velocity.x");
+            //    rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
+            //    isMoveHorizontal = false;
+            //    initialPortionToMove = 0;
+            //    portionsOfAddForce = 0;
+            //}
+        }
+    }
+
     private bool IfDontReachedPositionX()
     {
-        if (Mathf.Abs(moduloPositionX) > decreasePortionBy) return ifDontReachedPositionX = true;
+        moduloPositionX = transform.position.x % portionToMoveX;
+
+        if (isMoveHorizontal)
+        {
+            decreasePortionByMultiplier = 2;
+        }
+        else decreasePortionByMultiplier = 1;
+
+        if (Mathf.Abs(moduloPositionX) > decreasePortionBy * decreasePortionByMultiplier) return ifDontReachedPositionX = true;
         else return ifDontReachedPositionX = false;
     }
 
