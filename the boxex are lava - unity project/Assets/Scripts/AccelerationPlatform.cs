@@ -14,6 +14,7 @@ public class AccelerationPlatform : MonoBehaviour
 
     GameObject player;
     SphereCollider playerCollider;
+    PlayerController playerController;
 
     float acceleration = 1f;
     
@@ -30,6 +31,7 @@ public class AccelerationPlatform : MonoBehaviour
         textureOffsetUpdateY = GetComponent<MeshRenderer>().material.mainTextureOffset.y;
         player = GameObject.FindGameObjectWithTag("Player");
         playerCollider = player.GetComponent<SphereCollider>();
+        playerController = player.GetComponent<PlayerController>();
         accelerationTimeRestart = accelerationTime;
         acceleration = accelerationOnStart;
         accelerationAmount /= 10000;
@@ -46,11 +48,13 @@ public class AccelerationPlatform : MonoBehaviour
         if (isAccelerate)
         {
             Accelerate();
+            //playerController.afterAccelerationPlatformUsed = true;
         }
 
         if (isDeaccelerate)
         {
             Deaccelerate();
+            //playerController.afterAccelerationPlatformUsed = false;
         }
     }
 
@@ -73,7 +77,8 @@ public class AccelerationPlatform : MonoBehaviour
         {
             if (player.GetComponent<PlayerController>().IsGrounded())
             {
-                player.GetComponent<Rigidbody>().velocity *= acceleration;
+                //player.GetComponent<Rigidbody>().velocity *= acceleration;
+                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, player.GetComponent<Rigidbody>().velocity.y, player.GetComponent<Rigidbody>().velocity.z * acceleration);
                 playerCollider.sharedMaterial.staticFriction = 4f;
                 playerCollider.sharedMaterial.dynamicFriction = 4f;
             }

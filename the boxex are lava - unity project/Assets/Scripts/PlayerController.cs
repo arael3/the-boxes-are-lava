@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviour
 
     int decreasePortionByMultiplier;
 
+    [HideInInspector] public bool afterAccelerationPlatformUsed = false;
+
     private void Awake()
     {
         //playerActionControls = new PlayerActionControls();
@@ -124,108 +126,111 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("jumpPlatformActivated = " + JumpingPlatform.jumpPlatformActivated + "  IsGrounded() = " + IsGrounded());
-        
-        // Movement control with using New Input System module
-        // Read the movement value
-        //horizontalMovementInput = playerActionControls.Land.Horizontal.ReadValue<float>();
-        //verticalMovementInput = playerActionControls.Land.Vertical.ReadValue<float>();
-
-        // Read the jump value
-        //jump = playerActionControls.Land.Jump.ReadValue<float>();
-
-        // Move the player
-        //transform.position += new Vector3(horizontalMovementInput * speed * Time.deltaTime, 0f, verticalMovementInput * speed * Time.deltaTime);
-
-        //Debug.DrawRay(transform.position, Vector3.down, Color.red);
-        if (transform.localScale.y > 0.1f)
+        if (StartCounting.ifGameStarted)
         {
-            playerSize = transform.localScale.y - Time.deltaTime / 100 * meltingSpeed;
-            transform.localScale = new Vector3(playerSize, playerSize, playerSize);
-        } 
-        else
-            PlayerPlashed();
+            //Debug.Log("jumpPlatformActivated = " + JumpingPlatform.jumpPlatformActivated + "  IsGrounded() = " + IsGrounded());
 
-        // Keyboard control
-        //if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
-        if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
-        {
-            horizontal = Input.GetAxisRaw("Horizontal");
-        }
+            // Movement control with using New Input System module
+            // Read the movement value
+            //horizontalMovementInput = playerActionControls.Land.Horizontal.ReadValue<float>();
+            //verticalMovementInput = playerActionControls.Land.Vertical.ReadValue<float>();
 
-        if (turnLeftButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
-        {
-            horizontal = -1;
-            turnLeftButton.isButtonPressed = false;
-        }
+            // Read the jump value
+            //jump = playerActionControls.Land.Jump.ReadValue<float>();
 
-        if (turnRightButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
-        {
-            horizontal = 1;
-            turnRightButton.isButtonPressed = false;
-        }
+            // Move the player
+            //transform.position += new Vector3(horizontalMovementInput * speed * Time.deltaTime, 0f, verticalMovementInput * speed * Time.deltaTime);
 
-        //if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
-        if (transform.localScale.y > 0.1f && !isLevelEnd)
-        {
-            //vertical = Input.GetAxisRaw("Vertical");
-            vertical = 1;
-        }
-            
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jump = true;
-        }
-
-        // Touch control
-        if (Mathf.Abs(joystick.Horizontal) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
-            horizontal = joystick.Horizontal;
-
-        if (Mathf.Abs(joystick.Vertical) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
-            vertical = joystick.Vertical;
-
-        if (horizontal != 0)
-        {
-            MoveHorizontalInitial();
-        }
-
-        if (isMoveHorizontal)
-        {
-            IfDontReachedPositionX();
-        }
-        else
-        {
-            IfDontReachedPositionX();
-
-           if (ifDontReachedPositionX)
-           {
-                AutoReachThePositionX();
-           }
-        }
-        
-        if (transform.position.y < -10f && !isPlashed) 
-        {
-            IsPlashed();
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
-        }
-
-        if (IsGrounded()) DropADroplet();
-
-        if (damageTrigger && safeTimeAfterDamage > 0f)
-        {
-            safeTimeAfterDamage -= Time.deltaTime;
-        }
-
-        if (isShieldActive)
-        {
-            shieldTimer -= Time.deltaTime;
-
-            if (shieldTimer < 0)
+            //Debug.DrawRay(transform.position, Vector3.down, Color.red);
+            if (transform.localScale.y > 0.1f)
             {
-                isShieldActive = false;
-                shieldTimer = shieldTimerOnStart;
-                shieldTimerIcon.GetComponent<RawImage>().enabled = false;
+                playerSize = transform.localScale.y - Time.deltaTime / 100 * meltingSpeed;
+                transform.localScale = new Vector3(playerSize, playerSize, playerSize);
+            }
+            else
+                PlayerPlashed();
+
+            // Keyboard control
+            //if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
+            if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
+            {
+                horizontal = Input.GetAxisRaw("Horizontal");
+            }
+
+            if (turnLeftButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
+            {
+                horizontal = -1;
+                turnLeftButton.isButtonPressed = false;
+            }
+
+            if (turnRightButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
+            {
+                horizontal = 1;
+                turnRightButton.isButtonPressed = false;
+            }
+
+            //if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
+            if (transform.localScale.y > 0.1f && !isLevelEnd)
+            {
+                //vertical = Input.GetAxisRaw("Vertical");
+                vertical = 1;
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                jump = true;
+            }
+
+            // Touch control
+            if (Mathf.Abs(joystick.Horizontal) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
+                horizontal = joystick.Horizontal;
+
+            if (Mathf.Abs(joystick.Vertical) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
+                vertical = joystick.Vertical;
+
+            if (horizontal != 0)
+            {
+                MoveHorizontalInitial();
+            }
+
+            if (isMoveHorizontal)
+            {
+                IfDontReachedPositionX();
+            }
+            else
+            {
+                IfDontReachedPositionX();
+
+                if (ifDontReachedPositionX)
+                {
+                    AutoReachThePositionX();
+                }
+            }
+
+            if (transform.position.y < -10f && !isPlashed)
+            {
+                IsPlashed();
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+            }
+
+            if (IsGrounded()) DropADroplet();
+
+            if (damageTrigger && safeTimeAfterDamage > 0f)
+            {
+                safeTimeAfterDamage -= Time.deltaTime;
+            }
+
+            if (isShieldActive)
+            {
+                shieldTimer -= Time.deltaTime;
+
+                if (shieldTimer < 0)
+                {
+                    isShieldActive = false;
+                    shieldTimer = shieldTimerOnStart;
+                    shieldTimerIcon.GetComponent<RawImage>().enabled = false;
+                }
             }
         }
     }
@@ -404,6 +409,7 @@ public class PlayerController : MonoBehaviour
                 if (turnRight)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
 
                     if (portionsOfAddForce < maxPortionsOfAddForce)
                     {
@@ -415,6 +421,8 @@ public class PlayerController : MonoBehaviour
                 else if (turnLeft)
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
+
                     //if (Mathf.Abs(rb.velocity.x) < maxHorizontalVelocity)
                     if (portionsOfAddForce < maxPortionsOfAddForce)
                     {
@@ -425,7 +433,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Zero rb.velocity.x");
+                //Debug.Log("Zero rb.velocity.x");
                 rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
                 isMoveHorizontal = false;
                 initialPortionToMove = 0;
@@ -458,10 +466,12 @@ public class PlayerController : MonoBehaviour
                 if (multiplesOfThePortionToMove > 0.5f)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
                 else
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
             }
             else 
@@ -469,10 +479,12 @@ public class PlayerController : MonoBehaviour
                 if (multiplesOfThePortionToMove < 0.5f)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
                 else
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
+                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
             }
             
@@ -494,9 +506,9 @@ public class PlayerController : MonoBehaviour
 
         if (isMoveHorizontal)
         {
-            decreasePortionByMultiplier = 2;
+            decreasePortionByMultiplier = 3;
         }
-        else decreasePortionByMultiplier = 1;
+        else decreasePortionByMultiplier = 2;
 
         if (Mathf.Abs(moduloPositionX) > decreasePortionBy * decreasePortionByMultiplier) return ifDontReachedPositionX = true;
         else return ifDontReachedPositionX = false;

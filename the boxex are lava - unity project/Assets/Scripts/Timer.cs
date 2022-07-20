@@ -13,16 +13,22 @@ public class Timer : MonoBehaviour
 
     Points points;
 
-    void Start()
+    private void Awake()
     {
         timeText = GetComponent<TextMeshProUGUI>();
-        time = 100;
+        time = 100f;
+        timeInt = (int)time;
+        timeText.text = timeInt.ToString();
+    }
+
+    void Start()
+    {
         points = GameObject.Find("Points Text").GetComponent<Points>();
     }
 
     void Update()
     {
-        if (!points.addPointsForTime && !isPointsForTimeAdded)
+        if (!points.addPointsForTime && !isPointsForTimeAdded && StartCounting.ifGameStarted)
         {
             time -= Time.deltaTime;
             timeInt = (int)time;
