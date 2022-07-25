@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float horizontalSpeed = 1f;
     [SerializeField] float staticHorizontalSpeed = 1f;
 
+    PauseMenu pauseMenu;
+
     [HideInInspector]
     public bool isLevelEnd = false;
 
@@ -94,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool afterAccelerationPlatformUsed = false;
     private int numberOfMoves;
+    [HideInInspector] public static bool isGameOver;
 
     private void Awake()
     {
@@ -117,6 +120,7 @@ public class PlayerController : MonoBehaviour
         rb.maxAngularVelocity = maxAngularVelocity;
         //transform.position = GameObject.Find("StartPoint").transform.position;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        pauseMenu = GameObject.Find("Canvas").GetComponent<PauseMenu>();
         shieldTimer = shieldTimerOnStart;
 
         shieldTimerIcon = GameObject.Find("ShieldTimerIcon").GetComponent<RawImage>();
@@ -129,6 +133,11 @@ public class PlayerController : MonoBehaviour
     {
         if (StartCounting.ifGameStarted)
         {
+            if (!isLevelEnd && Timer.timeInt <= 0)
+            {
+                PlayerPlashed();
+            }
+
             //Debug.Log("jumpPlatformActivated = " + JumpingPlatform.jumpPlatformActivated + "  IsGrounded() = " + IsGrounded());
 
             // Movement control with using New Input System module
@@ -215,10 +224,11 @@ public class PlayerController : MonoBehaviour
             if (transform.position.y < -10f && !isPlashed)
             {
                 IsPlashed();
-                GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+                GameOverScreen();
             }
 
-            if (IsGrounded()) DropADroplet();
+            if (IsGrounded() && !pauseMenu.isGamePause) DropADroplet();
 
             if (damageTrigger && safeTimeAfterDamage > 0f)
             {
@@ -636,18 +646,50 @@ public class PlayerController : MonoBehaviour
     {
         IsPlashed();
 
-        rb.velocity = Vector3.zero;
-        sphereCollider.radius = 0.01f;
+        rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        if (transform.localScale.x < 0.7f)
+        if (Timer.timeInt <= 0)
         {
-            plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
-            transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
+            if (transform.localScale.x < 1.5f)
+            {
+                plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
+                transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
+                if (sphereCollider.radius > 0.011f)
+                {
+                    sphereCollider.radius -= Time.deltaTime / 10 * plashSizeSpeed;
+                }
+            }
+            else
+            {
+                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+                GameOverScreen();
+            }
         }
-        else
+        else 
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+            if (transform.localScale.x < 0.7f)
+            {
+                plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
+                transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
+            }
+            else
+            {
+                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+                GameOverScreen();
+            }
         }
+        
+        
+    }
+
+    public void GameOverScreen()
+    {
+        isGameOver = true;
+        Time.timeScale = 0;
+        GameOverTextController.tmp.enabled = true;
+        GameObject.Find("Restart Button Text").GetComponent<TextMeshProUGUI>().enabled = true;
+        GameObject.Find("Restart Button").GetComponent<Image>().enabled = true;
+        GameObject.Find("Restart Button").GetComponent<Button>().enabled = true;
     }
 }

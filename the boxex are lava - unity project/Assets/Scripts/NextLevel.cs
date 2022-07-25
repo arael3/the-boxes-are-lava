@@ -8,10 +8,13 @@ public class NextLevel : MonoBehaviour
 
     SoundController soundController;
 
+    GameObject player;
+
     void Start()
     {
         points = GameObject.Find("Points Text").GetComponent<Points>();
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,7 +23,7 @@ public class NextLevel : MonoBehaviour
         {
             soundController.PlaySound("CoinsForTime");
             points.addPointsForTime = true;
-
+            player.GetComponent<PlayerController>().isLevelEnd = true;
             //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("NextLevel");
         }
     }

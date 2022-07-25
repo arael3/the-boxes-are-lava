@@ -34,11 +34,12 @@ public class Points : MonoBehaviour
 
     public void PointsForTime()
     {
-        if (timer.timeInt > 0)
+        //if (timer.timeInt > 0)
+        if (Timer.timeInt > 0)
         {
             if (addPointsPause)
             {
-                timer.timeInt--;
+                Timer.timeInt--;
                 pointsAmount++;
 
                 addPointsPause = false;

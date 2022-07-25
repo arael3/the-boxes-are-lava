@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
     TextMeshProUGUI timeText;
-    float time;
-    [HideInInspector] public int timeInt;
+    [SerializeField] float time = 100f;
+    [HideInInspector] public static int timeInt;
 
     [HideInInspector] public bool isPointsForTimeAdded = false;
 
@@ -16,7 +17,6 @@ public class Timer : MonoBehaviour
     private void Awake()
     {
         timeText = GetComponent<TextMeshProUGUI>();
-        time = 100f;
         timeInt = (int)time;
         timeText.text = timeInt.ToString();
     }
@@ -28,11 +28,17 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if (!points.addPointsForTime && !isPointsForTimeAdded && StartCounting.ifGameStarted)
+        if (!points.addPointsForTime && !isPointsForTimeAdded && StartCounting.ifGameStarted && time > 0)
         {
             time -= Time.deltaTime;
             timeInt = (int)time;
             timeText.text = timeInt.ToString();
+
+            if (time < 16)
+            {
+                timeText.color = new Color(1f, 0.26f, 0.26f, 1f);
+                GameObject.Find("Time Icon").GetComponent<RawImage>().color = new Color(1f, 0.26f, 0.26f, 1f);
+            }
         }
         else timeText.text = timeInt.ToString();
     }

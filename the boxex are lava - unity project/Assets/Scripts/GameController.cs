@@ -19,7 +19,13 @@ public class GameController : MonoBehaviour
         
     }
 
-    IEnumerator RestartLevel()
+    public void RestartLevelMethod()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
+    }
+
+    public IEnumerator RestartLevelCoroutine()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -30,7 +36,7 @@ public class GameController : MonoBehaviour
     {
         soundController.PlaySound("Win");
         player = GameObject.FindGameObjectWithTag("Player");
-        player.GetComponent<PlayerController>().isLevelEnd = true;
+        //player.GetComponent<PlayerController>().isLevelEnd = true;
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0.001f);
 
         yield return new WaitForSeconds(2f);
