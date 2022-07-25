@@ -39,7 +39,7 @@ public class LifeBonus : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (player.transform.localScale.y < 1.5f)
+            if (player.transform.localScale.y < 1.4f)
             {
                 soundController.PlaySound("LifeBonus");
                 isTrigger = true;
