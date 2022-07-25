@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
     int decreasePortionByMultiplier;
 
     [HideInInspector] public bool afterAccelerationPlatformUsed = false;
+    private int numberOfMoves;
 
     private void Awake()
     {
@@ -155,18 +156,22 @@ public class PlayerController : MonoBehaviour
             if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
             {
                 horizontal = Input.GetAxisRaw("Horizontal");
+
+                CountNumberOfMoves();
             }
 
             if (turnLeftButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
             {
                 horizontal = -1;
                 turnLeftButton.isButtonPressed = false;
+                CountNumberOfMoves();
             }
 
             if (turnRightButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
             {
                 horizontal = 1;
                 turnRightButton.isButtonPressed = false;
+                CountNumberOfMoves();
             }
 
             //if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
@@ -175,7 +180,6 @@ public class PlayerController : MonoBehaviour
                 //vertical = Input.GetAxisRaw("Vertical");
                 vertical = 1;
             }
-
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -207,7 +211,7 @@ public class PlayerController : MonoBehaviour
                     AutoReachThePositionX();
                 }
             }
-
+            
             if (transform.position.y < -10f && !isPlashed)
             {
                 IsPlashed();
@@ -234,6 +238,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    
 
     private void FixedUpdate()
     {
@@ -396,6 +402,9 @@ public class PlayerController : MonoBehaviour
         }   
     }
 
+    // MoveHorizontalRigidbody method moves the player along the X axis by a value close to the portionToMoveX value.
+    // In other words, the method moves the player to a position equal to the portionToMoveX value, or a multiple of the portionToMoveX value.
+    // MoveHorizontalRigidbody method mainly uses the Translate method to change positions and supportively uses the AddForce method.
     private void MoveHorizontalRigidbody()
     {
         if (IsGrounded() || transform.position.y > 0)
@@ -435,13 +444,21 @@ public class PlayerController : MonoBehaviour
             {
                 //Debug.Log("Zero rb.velocity.x");
                 rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
-                isMoveHorizontal = false;
                 initialPortionToMove = 0;
                 portionsOfAddForce = 0;
+                
+                if (numberOfMoves > 0) numberOfMoves--;
+                else numberOfMoves++;
+
+                if (numberOfMoves == 0)
+                {
+                    isMoveHorizontal = false;
+                }
             }
         }
     }
 
+    // Corrects the player position after after executing MoveHorizontalRigidbody method.
     private void AutoReachThePositionX()
     {
         Debug.Log("AutoReachThePositionX()");
@@ -500,6 +517,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // IfDontReachedPositionX method checks if the player reaches the position.x = 0 or a multiple of the portionToMoveX value
     private bool IfDontReachedPositionX()
     {
         moduloPositionX = transform.position.x % portionToMoveX;
@@ -512,6 +530,36 @@ public class PlayerController : MonoBehaviour
 
         if (Mathf.Abs(moduloPositionX) > decreasePortionBy * decreasePortionByMultiplier) return ifDontReachedPositionX = true;
         else return ifDontReachedPositionX = false;
+    }
+
+    // CountNumberOfMoves method counts how many moves player have to make. Number of moves depends on numbers of pressed keys or buttons.
+    // CountNumberOfMoves method improves / makes it easier to change the track by several positions
+    private void CountNumberOfMoves()
+    {
+        if (horizontal < 0)
+        {
+            if (numberOfMoves < 0)
+            {
+                numberOfMoves--;
+            }
+            else
+            {
+                numberOfMoves = 0;
+                numberOfMoves--;
+            }
+        }
+        else
+        {
+            if (numberOfMoves > 0)
+            {
+                numberOfMoves++;
+            }
+            else
+            {
+                numberOfMoves = 0;
+                numberOfMoves++;
+            }
+        }
     }
 
     public void IsJump()

@@ -17439,7 +17439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8967cec7e62683742b0ce647e80c27e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCountingValueRestart: 3.99
+  startCountingValueRestart: 1.09
 --- !u!114 &706299772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26604,8 +26604,8 @@ Transform:
   - {fileID: 620353973}
   - {fileID: 2026127733}
   - {fileID: 1025784341}
-  - {fileID: 1467654602}
   - {fileID: 220500328}
+  - {fileID: 1467654602}
   - {fileID: 1538056140}
   - {fileID: 1679203528}
   - {fileID: 50545532}
