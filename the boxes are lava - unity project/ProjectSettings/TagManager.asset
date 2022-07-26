@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LavaBox
   - SoundController
+  - ThemeMusicController
   layers:
   - Default
   - TransparentFX
