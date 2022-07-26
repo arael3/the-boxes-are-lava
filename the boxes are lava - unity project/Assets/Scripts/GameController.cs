@@ -8,10 +8,13 @@ public class GameController : MonoBehaviour
     GameObject player;
     SoundController soundController;
 
+    [HideInInspector] public AudioSource audioSource;
+
     void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         player = GameObject.FindGameObjectWithTag("Player");
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     public void RestartLevelMethod()

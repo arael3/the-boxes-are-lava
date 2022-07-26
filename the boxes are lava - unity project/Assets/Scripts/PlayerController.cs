@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     SoundController soundController;
 
+    GameController gameController;
+
     float playerSize;
     float plashSize;
     bool isPlashed = false;
@@ -94,6 +96,7 @@ public class PlayerController : MonoBehaviour
         rb.maxAngularVelocity = maxAngularVelocity;
         //transform.position = GameObject.Find("StartPoint").transform.position;
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         pauseMenu = GameObject.Find("Canvas").GetComponent<PauseMenu>();
         shieldTimer = shieldTimerOnStart;
 
@@ -503,7 +506,11 @@ public class PlayerController : MonoBehaviour
 
     void IsPlashed()
     {
-        if (!isPlashed) soundController.PlaySound("Lose");
+        if (!isPlashed) 
+        {
+            gameController.audioSource.volume *= 0.2f;
+            soundController.PlaySound("Lose");
+        }
 
         isPlashed = true;
     }

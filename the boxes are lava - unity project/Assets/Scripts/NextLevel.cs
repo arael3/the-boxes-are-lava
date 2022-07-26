@@ -8,12 +8,15 @@ public class NextLevel : MonoBehaviour
 
     SoundController soundController;
 
+    GameController gameController;
+
     GameObject player;
 
     void Start()
     {
         points = GameObject.Find("Points Text").GetComponent<Points>();
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -21,6 +24,7 @@ public class NextLevel : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            gameController.audioSource.volume *= 0.2f;
             soundController.PlaySound("CoinsForTime");
             points.addPointsForTime = true;
             player.GetComponent<PlayerController>().isLevelEnd = true;
