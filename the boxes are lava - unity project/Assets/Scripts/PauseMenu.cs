@@ -12,10 +12,12 @@ public class PauseMenu : MonoBehaviour
 
     [HideInInspector] public bool isGamePause = false;
 
+    PlayerController playerController;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -41,7 +43,7 @@ public class PauseMenu : MonoBehaviour
         isGamePause = true;
         pauseButton.SetActive(false);
         
-        if (!PlayerController.isGameOver)
+        if (!playerController.isGameOver)
         {
             resumeButton.SetActive(true);
         }
@@ -55,7 +57,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         
-        if (!PlayerController.isGameOver)
+        if (!playerController.isGameOver)
         {
             Time.timeScale = 1;
         }

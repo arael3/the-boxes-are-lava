@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool afterAccelerationPlatformUsed = false;
     private int numberOfMoves;
-    [HideInInspector] public static bool isGameOver;
+    [HideInInspector] public bool isGameOver;
 
     private void Awake()
     {

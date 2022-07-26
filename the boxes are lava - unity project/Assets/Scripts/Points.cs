@@ -8,6 +8,10 @@ public class Points : MonoBehaviour
     [HideInInspector] public int pointsAmount;
     [HideInInspector] public bool addPointsForTime = false;
 
+    [SerializeField] GameObject newHighScoreText;
+
+    [SerializeField] GameObject highScoreText;
+
     TextMeshProUGUI pointsUI;
     Timer timer;
 
@@ -19,6 +23,7 @@ public class Points : MonoBehaviour
         pointsAmount = 0;
         pointsUI = GetComponent<TextMeshProUGUI>();
         timer = GameObject.Find("Time Text").GetComponent<Timer>();
+        highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
     }
 
     // Update is called once per frame
@@ -50,8 +55,36 @@ public class Points : MonoBehaviour
         {
             addPointsForTime = false;
             timer.isPointsForTimeAdded = true;
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("NextLevel");
+
+            if (pointsAmount > PlayerPrefs.GetInt("HighScore", 0))
+            {
+                newHighScoreText.SetActive(true);
+
+                PlayerPrefs.SetInt("HighScore", pointsAmount);
+
+                highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
+            }
+
+            StartCoroutine("WaitAfterPointsForTimeAddedCoroutine");
         }
 
+    }
+
+    public void ResetHighScore()
+    {
+        PlayerPrefs.SetInt("HighScore", 0);
+
+        highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
+    }
+
+    public IEnumerator WaitAfterPointsForTimeAddedCoroutine()
+    {
+        yield return new WaitForSeconds(2f);
+
+        newHighScoreText.SetActive(false);
+
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("NextLevel");
+
+        yield break;
     }
 }

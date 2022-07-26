@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -35,11 +36,11 @@ public class GameController : MonoBehaviour
     IEnumerator NextLevel()
     {
         soundController.PlaySound("Win");
-        player = GameObject.FindGameObjectWithTag("Player");
+        
         //player.GetComponent<PlayerController>().isLevelEnd = true;
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0.001f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
