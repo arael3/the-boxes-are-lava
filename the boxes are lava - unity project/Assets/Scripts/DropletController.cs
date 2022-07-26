@@ -7,13 +7,12 @@ public class DropletController : MonoBehaviour
     MeshRenderer mesh;
     float lifeTime = 3f;
     float transparency = 0.8f;
-    // Start is called before the first frame update
+
     void Start()
     {
         mesh = GetComponent<MeshRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         lifeTime -= Time.deltaTime;

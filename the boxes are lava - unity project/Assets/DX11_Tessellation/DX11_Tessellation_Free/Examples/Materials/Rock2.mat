@@ -92,10 +92,10 @@ Material:
     - _SpecBurn: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tess: 32
+    - _Tess: 22.2
     - _UVSec: 0
     - _ZWrite: 1
-    - _maxDist: 90
+    - _maxDist: 105
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Displacement_TO: {r: 1, g: 1, b: 0, a: 0}

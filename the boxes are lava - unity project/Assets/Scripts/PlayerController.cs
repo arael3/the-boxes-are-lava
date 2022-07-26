@@ -44,11 +44,6 @@ public class PlayerController : MonoBehaviour
     float vertical;
     float horizontal;
 
-    float horizontalMovementInput;
-    float verticalMovementInput;
-
-
-    //float jump;
     bool jump = false;
     bool afterJump = false;
     float timerAfterJump = 0.2f;
@@ -66,25 +61,14 @@ public class PlayerController : MonoBehaviour
     TurnRightButton turnRightButton;
 
     private bool isMoveHorizontal = false;
-    private float actualAxisX;
 
     [SerializeField] float portionToMoveX = 1.5f;
-    float portionToMoveXRestart = 1.5f;
-    private float positionXToMove;
-    private float multiplierX;
     private bool turnRight;
     private bool turnLeft;
 
     [SerializeField] float decreasePortionBy = 0.05f;
 
-    // Movement control with using New Input System module
-    //PlayerActionControls playerActionControls;
-
-    int licznik = 0;
     private float initialPortionToMove = 0;
-    private int toMoveCounter = 0;
-
-    JumpingPlatform jumpingPlatform;
 
     float moduloPositionX;
     [SerializeField] float maxHorizontalVelocity = 1f;
@@ -100,17 +84,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        //playerActionControls = new PlayerActionControls();
-    }
 
-    private void OnEnable()
-    {
-        //playerActionControls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        //playerActionControls.Disable();
     }
 
     void Start()
@@ -138,20 +112,6 @@ public class PlayerController : MonoBehaviour
                 PlayerPlashed();
             }
 
-            //Debug.Log("jumpPlatformActivated = " + JumpingPlatform.jumpPlatformActivated + "  IsGrounded() = " + IsGrounded());
-
-            // Movement control with using New Input System module
-            // Read the movement value
-            //horizontalMovementInput = playerActionControls.Land.Horizontal.ReadValue<float>();
-            //verticalMovementInput = playerActionControls.Land.Vertical.ReadValue<float>();
-
-            // Read the jump value
-            //jump = playerActionControls.Land.Jump.ReadValue<float>();
-
-            // Move the player
-            //transform.position += new Vector3(horizontalMovementInput * speed * Time.deltaTime, 0f, verticalMovementInput * speed * Time.deltaTime);
-
-            //Debug.DrawRay(transform.position, Vector3.down, Color.red);
             if (transform.localScale.y > 0.1f)
             {
                 playerSize = transform.localScale.y - Time.deltaTime / 100 * meltingSpeed;
@@ -161,7 +121,6 @@ public class PlayerController : MonoBehaviour
                 PlayerPlashed();
 
             // Keyboard control
-            //if (Input.GetAxisRaw("Horizontal") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             if (Input.GetButtonDown("Horizontal") && transform.localScale.y > 0.1f && !isLevelEnd)
             {
                 horizontal = Input.GetAxisRaw("Horizontal");
@@ -169,6 +128,7 @@ public class PlayerController : MonoBehaviour
                 CountNumberOfMoves();
             }
 
+            // Touch buttons control
             if (turnLeftButton.isButtonPressed && transform.localScale.y > 0.1f && !isLevelEnd)
             {
                 horizontal = -1;
@@ -183,10 +143,8 @@ public class PlayerController : MonoBehaviour
                 CountNumberOfMoves();
             }
 
-            //if (Input.GetAxisRaw("Vertical") != 0 && transform.localScale.y > 0.1f && !isLevelEnd)
             if (transform.localScale.y > 0.1f && !isLevelEnd)
             {
-                //vertical = Input.GetAxisRaw("Vertical");
                 vertical = 1;
             }
 
@@ -194,13 +152,6 @@ public class PlayerController : MonoBehaviour
             {
                 jump = true;
             }
-
-            // Touch control
-            if (Mathf.Abs(joystick.Horizontal) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
-                horizontal = joystick.Horizontal;
-
-            if (Mathf.Abs(joystick.Vertical) > 0.2f && transform.localScale.y > 0.1f && !isLevelEnd)
-                vertical = joystick.Vertical;
 
             if (horizontal != 0)
             {
@@ -224,7 +175,7 @@ public class PlayerController : MonoBehaviour
             if (transform.position.y < -10f && !isPlashed)
             {
                 IsPlashed();
-                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
+
                 GameOverScreen();
             }
 
@@ -249,8 +200,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
-
     private void FixedUpdate()
     {
         if (vertical != 0)
@@ -258,17 +207,11 @@ public class PlayerController : MonoBehaviour
             MoveVertical();
         }
 
-        if (horizontal != 0)
-        {
-            //MoveHorizontalInitial();
-        }
-
         if (isMoveHorizontal)
         {
             MoveHorizontalRigidbody();
         }
 
-        //if (jump != 0)
         if (jump)
         {
             if (IsGrounded())
@@ -276,7 +219,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector3(0f, jumpForce, 0f));
                 afterJump = true;
             }
-            //jump = 0;
+
             jump = false;
         }
 
@@ -326,29 +269,8 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void Move()
-    {
-        // Movement control by using rotation and force in the right proportions
-        float addTorquePart = 1 - moveProportionSet;
-        float addForcePart = 1 - addTorquePart;
-
-        rb.AddTorque(vertical * speed * addTorquePart, 0f, -horizontal/2 * speed * addTorquePart);
-        
-        if (IsGrounded())
-        {
-            rb.AddForce(horizontal/2 * speed / 10 * addForcePart, 0f, vertical * speed / 10 * addForcePart, ForceMode.Impulse);
-        }
-        else
-        {
-            rb.AddForce(horizontal/2 * speed / 100, 0f, vertical * speed / 100, ForceMode.Impulse);
-        }
-
-        vertical = 0;
-    }
-
     private void MoveVertical()
     {
-        // Movement control by using rotation and force in the right proportions
         float addTorquePart = 1 - moveProportionSet;
         float addForcePart = 1 - addTorquePart;
 
@@ -384,34 +306,6 @@ public class PlayerController : MonoBehaviour
         horizontal = 0;
     }
 
-    private void MoveHorizontal()
-    {
-        if (IsGrounded() || transform.position.y > 0)
-        {
-            moduloPositionX = transform.position.x % portionToMoveX;
-
-            initialPortionToMove += decreasePortionBy;
-
-            if (Mathf.Abs(moduloPositionX) > decreasePortionBy || initialPortionToMove < decreasePortionBy * 3)
-            {
-                if (turnRight)
-                {
-                    transform.Translate(new Vector3(decreasePortionBy, 0f, 0f), Space.World);
-                }
-                else if (turnLeft)
-                {
-                    transform.Translate(new Vector3(-decreasePortionBy, 0f, 0f), Space.World);
-                }
-            }
-            else
-            {
-                rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
-                isMoveHorizontal = false;
-                initialPortionToMove = 0;
-            } 
-        }   
-    }
-
     // MoveHorizontalRigidbody method moves the player along the X axis by a value close to the portionToMoveX value.
     // In other words, the method moves the player to a position equal to the portionToMoveX value, or a multiple of the portionToMoveX value.
     // MoveHorizontalRigidbody method mainly uses the Translate method to change positions and supportively uses the AddForce method.
@@ -428,11 +322,9 @@ public class PlayerController : MonoBehaviour
                 if (turnRight)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
 
                     if (portionsOfAddForce < maxPortionsOfAddForce)
                     {
-                        //Debug.Log("rb.velocity.x = " + rb.velocity.x);
                         portionsOfAddForce++;
                         rb.AddForce(horizontalSpeed * Time.deltaTime, 0f, 0f, ForceMode.Impulse);
                     }
@@ -440,9 +332,7 @@ public class PlayerController : MonoBehaviour
                 else if (turnLeft)
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
 
-                    //if (Mathf.Abs(rb.velocity.x) < maxHorizontalVelocity)
                     if (portionsOfAddForce < maxPortionsOfAddForce)
                     {
                         portionsOfAddForce++;
@@ -452,7 +342,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Zero rb.velocity.x");
                 rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
                 initialPortionToMove = 0;
                 portionsOfAddForce = 0;
@@ -471,8 +360,6 @@ public class PlayerController : MonoBehaviour
     // Corrects the player position after after executing MoveHorizontalRigidbody method.
     private void AutoReachThePositionX()
     {
-        Debug.Log("AutoReachThePositionX()");
-
         if (IsGrounded() || transform.position.y > 0)
         {
             float multiplesOfThePortionToMove = Mathf.Abs(transform.position.x / portionToMoveX);
@@ -482,23 +369,15 @@ public class PlayerController : MonoBehaviour
                 multiplesOfThePortionToMove -= 1f;
             }
 
-            //moduloPositionX = transform.position.x % portionToMoveX;
-
-            //initialPortionToMove += decreasePortionBy;
-
-            //if (ifDontReachedPositionX || initialPortionToMove < decreasePortionBy * 5)
-            //{
             if (transform.position.x > 0)
             {
                 if (multiplesOfThePortionToMove > 0.5f)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
                 else
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
             }
             else 
@@ -506,24 +385,12 @@ public class PlayerController : MonoBehaviour
                 if (multiplesOfThePortionToMove < 0.5f)
                 {
                     transform.Translate(new Vector3(decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x + decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
                 else
                 {
                     transform.Translate(new Vector3(-decreasePortionBy * Time.deltaTime * staticHorizontalSpeed / 2, 0f, 0f), Space.World);
-                    //transform.position = new Vector3(transform.position.x - decreasePortionBy * Time.deltaTime * staticHorizontalSpeed, transform.position.y, transform.position.z);
                 }
             }
-            
-            //}
-            //else
-            //{
-            //    Debug.Log("Zero rb.velocity.x");
-            //    rb.velocity = new Vector3(0f, rb.velocity.y, rb.velocity.z);
-            //    isMoveHorizontal = false;
-            //    initialPortionToMove = 0;
-            //    portionsOfAddForce = 0;
-            //}
         }
     }
 
@@ -597,7 +464,6 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            // hit.distance <= transform.localScale.x / 1.9f means that hit.distance should be <= sphere radius
             if (hit.distance <= transform.localScale.x / 1.8f)
                 return true;
             else
@@ -662,7 +528,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
                 GameOverScreen();
             }
         }
@@ -675,12 +540,9 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().StartCoroutine("RestartLevel");
                 GameOverScreen();
             }
         }
-        
-        
     }
 
     public void GameOverScreen()

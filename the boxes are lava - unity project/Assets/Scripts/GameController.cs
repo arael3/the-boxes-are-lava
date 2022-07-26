@@ -7,17 +7,11 @@ public class GameController : MonoBehaviour
 {
     GameObject player;
     SoundController soundController;
-    // Start is called before the first frame update
+
     void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         player = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void RestartLevelMethod()
@@ -37,7 +31,6 @@ public class GameController : MonoBehaviour
     {
         soundController.PlaySound("Win");
         
-        //player.GetComponent<PlayerController>().isLevelEnd = true;
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0.001f);
 
         yield return new WaitForSeconds(1.5f);

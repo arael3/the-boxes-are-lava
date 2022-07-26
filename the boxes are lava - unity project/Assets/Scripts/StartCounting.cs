@@ -25,6 +25,7 @@ public class StartCounting : MonoBehaviour
         afterStartCountingValue = afterStartCountingValueRestart;
         ifGameStarted = false;
         tmp = gameObject.GetComponent<TextMeshProUGUI>();
+        tmp.enabled = true;
     }
 
     void Update()

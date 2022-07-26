@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Points : MonoBehaviour
 {
@@ -17,16 +18,14 @@ public class Points : MonoBehaviour
 
     bool addPointsPause = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         pointsAmount = 0;
         pointsUI = GetComponent<TextMeshProUGUI>();
         timer = GameObject.Find("Time Text").GetComponent<Timer>();
-        highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
+        highScoreText.GetComponent<TextMeshProUGUI>().text = "LVL " + SceneManager.GetActiveScene().buildIndex + " - HIGH SCORE: " + GetHighScore();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (addPointsForTime)
@@ -39,7 +38,6 @@ public class Points : MonoBehaviour
 
     public void PointsForTime()
     {
-        //if (timer.timeInt > 0)
         if (Timer.timeInt > 0)
         {
             if (addPointsPause)
@@ -56,25 +54,34 @@ public class Points : MonoBehaviour
             addPointsForTime = false;
             timer.isPointsForTimeAdded = true;
 
-            if (pointsAmount > PlayerPrefs.GetInt("HighScore", 0))
+            if (pointsAmount > PlayerPrefs.GetInt("Lvl" + SceneManager.GetActiveScene().buildIndex + "HighScore", 0))
             {
                 newHighScoreText.SetActive(true);
 
-                PlayerPrefs.SetInt("HighScore", pointsAmount);
+                SetHighScore();
 
-                highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
+                highScoreText.GetComponent<TextMeshProUGUI>().text = "LVL " + SceneManager.GetActiveScene().buildIndex + " - HIGH SCORE: " + GetHighScore();
             }
 
             StartCoroutine("WaitAfterPointsForTimeAddedCoroutine");
         }
-
     }
-
     public void ResetHighScore()
     {
-        PlayerPrefs.SetInt("HighScore", 0);
+        PlayerPrefs.SetInt("Lvl" + SceneManager.GetActiveScene().buildIndex + "HighScore", 0);
 
-        highScoreText.GetComponent<TextMeshProUGUI>().text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore", 0);
+        highScoreText.GetComponent<TextMeshProUGUI>().text = "LVL " + SceneManager.GetActiveScene().buildIndex + " - HIGH SCORE: " + GetHighScore();
+    }
+
+
+    void SetHighScore()
+    { 
+        PlayerPrefs.SetInt("Lvl" + SceneManager.GetActiveScene().buildIndex + "HighScore", pointsAmount);
+    }
+
+    string GetHighScore()
+    {
+        return PlayerPrefs.GetInt("Lvl" + SceneManager.GetActiveScene().buildIndex + "HighScore", 0).ToString();
     }
 
     public IEnumerator WaitAfterPointsForTimeAddedCoroutine()

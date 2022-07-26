@@ -11,14 +11,12 @@ public class Coin : MonoBehaviour
     SoundController soundController;
     Points points;
 
-    // Start is called before the first frame update
     void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         points = GameObject.Find("Points Text").GetComponent<Points>(); ;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isTrigger)
@@ -27,7 +25,6 @@ public class Coin : MonoBehaviour
             {
                 transform.localScale -= new Vector3(1f, 1f, 1f) * Time.deltaTime;
                 transform.position = Vector3.Lerp(transform.position, Camera.main.transform.position + coinPositionAdjustment, lerpSize * Time.deltaTime);
-                //transform.position += new Vector3(0f, 10f, 0f) * Time.deltaTime;
             }
             else Destroy(gameObject);
         }
