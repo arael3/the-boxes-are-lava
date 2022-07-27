@@ -13,6 +13,8 @@ public class Points : MonoBehaviour
 
     [SerializeField] GameObject highScoreText;
 
+    SoundController soundController;
+
     TextMeshProUGUI pointsUI;
     Timer timer;
 
@@ -23,6 +25,7 @@ public class Points : MonoBehaviour
         pointsAmount = 0;
         pointsUI = GetComponent<TextMeshProUGUI>();
         timer = GameObject.Find("Time Text").GetComponent<Timer>();
+        soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
         highScoreText.GetComponent<TextMeshProUGUI>().text = "LVL " + SceneManager.GetActiveScene().buildIndex + " - HIGH SCORE: " + GetHighScore();
     }
 
@@ -62,6 +65,8 @@ public class Points : MonoBehaviour
 
                 highScoreText.GetComponent<TextMeshProUGUI>().text = "LVL " + SceneManager.GetActiveScene().buildIndex + " - HIGH SCORE: " + GetHighScore();
             }
+
+            soundController.PlaySound("Win");
 
             StartCoroutine("WaitAfterPointsForTimeAddedCoroutine");
         }

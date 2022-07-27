@@ -7,20 +7,18 @@ public class GameController : MonoBehaviour
 {
     GameObject player;
     SoundController soundController;
-    ThemeMusicController themeMusicController;
 
     void Start()
     {
         soundController = GameObject.FindGameObjectWithTag("SoundController").GetComponent<SoundController>();
-
-        themeMusicController = GameObject.FindGameObjectWithTag("ThemeMusicController").GetComponent<ThemeMusicController>();
 
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public void RestartLevelMethod()
     {
-        themeMusicController.audioSource.volume = themeMusicController.defaultVolume;
+        //themeMusicController.audioSource.volume = themeMusicController.defaultVolume;
+        soundController.FindSound("Theme").source.volume = soundController.defaultVolume;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
     }
@@ -34,13 +32,15 @@ public class GameController : MonoBehaviour
 
     IEnumerator NextLevel()
     {
-        soundController.PlaySound("Win");
+        //soundController.PlaySound("Win");
         
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0.001f);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
 
-        themeMusicController.audioSource.volume = themeMusicController.defaultVolume;
+        //themeMusicController.audioSource.volume = themeMusicController.defaultVolume;
+
+        soundController.FindSound("Theme").source.volume = soundController.defaultVolume;
 
         if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
