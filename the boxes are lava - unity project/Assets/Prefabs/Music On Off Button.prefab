@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5725621943890894504}
   - component: {fileID: 5725621943890894511}
   - component: {fileID: 5725621943890894505}
+  - component: {fileID: 6585837857519827337}
   m_Layer: 5
   m_Name: Music On Off Button
   m_TagString: MusicButton
@@ -26,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5725621943890894509}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -102,6 +103,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63b501de68b98614fbe13f53371b518d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6585837857519827337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5725621943890894509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc9dc03ae543f5e459814e27317e2451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5725621945379577947
