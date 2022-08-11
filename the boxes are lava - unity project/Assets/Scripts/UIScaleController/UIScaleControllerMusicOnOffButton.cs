@@ -23,14 +23,14 @@ public class UIScaleControllerMusicOnOffButton : MonoBehaviour
             else
             {
                 transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(-121f, -5f);
+                rectTransform.anchoredPosition = new Vector2(-121f, -1200f);
             } 
         }
         else 
         {
             if (SceneManager.GetActiveScene().buildIndex == 0)
             {
-                transform.localScale = Vector3.one;
+                transform.localScale = Vector3.one * 2f;
                 rectTransform.anchoredPosition = new Vector2(168f, 117f);
             }
             else
