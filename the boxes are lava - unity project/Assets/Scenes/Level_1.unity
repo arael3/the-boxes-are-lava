@@ -15942,7 +15942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8967cec7e62683742b0ce647e80c27e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCountingValueRestart: 3.99
+  startCountingValueRestart: 1.09
 --- !u!114 &706299772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28054,9 +28054,9 @@ MonoBehaviour:
   speed: 2
   maxVelocity: 24
   maxAngularVelocity: 10
-  meltingSpeed: 0.5
+  meltingSpeed: 0.55
   plashSizeSpeed: 5
-  damageFromLavaBox: 0.1
+  damageFromLavaBox: 0.125
   steamAfterDamageParticleSystem: {fileID: 3865118693588204478, guid: e33dafe69f0772c4788e5fb17403db7c, type: 3}
   steamSoundsAfterDamage:
   - {fileID: 8300000, guid: c4a0cf6f2ff204f47813f087786eb90a, type: 3}

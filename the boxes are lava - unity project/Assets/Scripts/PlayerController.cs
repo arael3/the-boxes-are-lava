@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
                 PlayerPlashed();
             }
 
-            if (transform.localScale.y > 0.1f)
+            if (transform.localScale.y > 0.3f)
             {
                 playerSize = transform.localScale.y - Time.deltaTime / 100 * meltingSpeed;
                 transform.localScale = new Vector3(playerSize, playerSize, playerSize);
@@ -481,7 +481,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("LavaBox") && !isShieldActive)
         {
-            if (transform.localScale.y > 0.2f)
+            // When the player's size (transform.localScale.y) drops below the set value, call PlayerPlashed() method. PlayerPlashed() method simulates the melt.
+            // After it is done, the game is over.
+            if (transform.localScale.y > 0.3f)
             {
                 // After receiving damage from lava box Player is protected from further damages over time = safeTimeAfterDamage
                 if (safeTimeAfterDamage <= 0)
@@ -520,33 +522,18 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        if (Timer.timeInt <= 0)
+        if (transform.localScale.x < 1.5f)
         {
-            if (transform.localScale.x < 1.5f)
+            plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
+            transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
+            if (sphereCollider.radius > 0.011f)
             {
-                plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
-                transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
-                if (sphereCollider.radius > 0.011f)
-                {
-                    sphereCollider.radius -= Time.deltaTime / 10 * plashSizeSpeed;
-                }
-            }
-            else
-            {
-                GameOverScreen();
+                sphereCollider.radius -= Time.deltaTime / 7 * plashSizeSpeed;
             }
         }
-        else 
+        else
         {
-            if (transform.localScale.x < 0.7f)
-            {
-                plashSize = transform.localScale.x + Time.deltaTime / 10 * plashSizeSpeed;
-                transform.localScale = new Vector3(plashSize, 0.01f, plashSize);
-            }
-            else
-            {
-                GameOverScreen();
-            }
+            GameOverScreen();
         }
     }
 
