@@ -12,13 +12,15 @@ public class UIScaleControllerPauseMenuBackground : MonoBehaviour
     }
     void Update()
     {
-        if (Screen.orientation == ScreenOrientation.Portrait)
-        {
-            transform.localScale = new Vector3(1f, 4f, 1f);
-        }
-        else 
-        {
-            transform.localScale = Vector3.one;
-        }
+
+            if (Screen.orientation == ScreenOrientation.Portrait)
+            {
+                transform.localScale = new Vector3(1f, 4f, 1f);
+            }
+            else 
+            {
+                transform.localScale = Vector3.one;
+            }
+
     }
 }

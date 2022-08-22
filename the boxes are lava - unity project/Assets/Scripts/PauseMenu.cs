@@ -18,6 +18,7 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame

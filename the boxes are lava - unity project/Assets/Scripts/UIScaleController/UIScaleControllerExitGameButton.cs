@@ -13,31 +13,33 @@ public class UIScaleControllerExitGameButton : MonoBehaviour
     }
     void Update()
     {
-        if (Screen.orientation == ScreenOrientation.Portrait)
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
+
+            if (Screen.orientation == ScreenOrientation.Portrait)
             {
-                transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(0f, -400f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one;
+                    rectTransform.anchoredPosition = new Vector2(0f, -400f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one * 3f;
+                    rectTransform.anchoredPosition = new Vector2(0f, -800f);
+                } 
             }
-            else
+            else 
             {
-                transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(0f, -800f);
-            } 
-        }
-        else 
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(0f, -400f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one;
+                    rectTransform.anchoredPosition = new Vector2(0f, -400f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one;
+                    rectTransform.anchoredPosition = new Vector2(0f, -189f);
+                }
             }
-            else
-            {
-                transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(0f, -189f);
-            }
-        }
+
     }
 }

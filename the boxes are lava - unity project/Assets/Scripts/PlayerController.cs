@@ -539,11 +539,18 @@ public class PlayerController : MonoBehaviour
 
     public void GameOverScreen()
     {
+        Debug.Log("GameOverScreen");
+
         isGameOver = true;
         Time.timeScale = 0;
-        GameOverTextController.tmp.enabled = true;
+        
+        GameObject.Find("Game Over Text").GetComponent<TextMeshProUGUI>().enabled = true;
+
         GameObject.Find("Restart Button Text").GetComponent<TextMeshProUGUI>().enabled = true;
         GameObject.Find("Restart Button").GetComponent<Image>().enabled = true;
         GameObject.Find("Restart Button").GetComponent<Button>().enabled = true;
+
+        GameObject.Find("Pause Button").GetComponent<Button>().enabled = false;
+        GameObject.Find("Pause Icon").GetComponent<RawImage>().enabled = false;
     }
 }

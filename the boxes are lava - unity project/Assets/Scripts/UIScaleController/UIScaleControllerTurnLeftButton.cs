@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIScaleControllerTime : MonoBehaviour
+public class UIScaleControllerTurnLeftButton : MonoBehaviour
 {
     RectTransform rectTransform;
 
@@ -16,12 +16,12 @@ public class UIScaleControllerTime : MonoBehaviour
             if (Screen.orientation == ScreenOrientation.Portrait)
             {
                 transform.localScale = Vector3.one * 1.7f;
-                rectTransform.anchoredPosition = new Vector2(57f, -262f);
+                rectTransform.anchoredPosition = new Vector2(220f, 247f);
             }
             else 
             {
                 transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(57f, -54f);
+                rectTransform.anchoredPosition = new Vector2(220f, 247f);
             }
 
     }

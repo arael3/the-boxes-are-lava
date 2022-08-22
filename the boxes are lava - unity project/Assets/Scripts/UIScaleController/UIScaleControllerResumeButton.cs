@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class UIScaleControllerShieldTimer : MonoBehaviour
+public class UIScaleControllerResumeButton : MonoBehaviour
 {
     RectTransform rectTransform;
 
@@ -15,14 +16,14 @@ public class UIScaleControllerShieldTimer : MonoBehaviour
 
 		if (Screen.orientation == ScreenOrientation.Portrait)
 		{
-			transform.localScale = Vector3.one * 1.7f;
-			rectTransform.anchoredPosition = new Vector2(57f, -285f);
+			transform.localScale = Vector3.one * 3f;
+			rectTransform.anchoredPosition = new Vector2(0f, -300f);
 		}
 		else 
 		{
 			transform.localScale = Vector3.one;
-			rectTransform.anchoredPosition = new Vector2(-50f, -69f);
+			rectTransform.anchoredPosition = new Vector2(0f, 10f);
 		}
-
+        
     }
 }

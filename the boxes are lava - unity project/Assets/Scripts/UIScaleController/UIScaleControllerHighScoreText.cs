@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class UIScaleControllerTime : MonoBehaviour
+public class UIScaleControllerHighScoreText : MonoBehaviour
 {
     RectTransform rectTransform;
 
@@ -16,12 +17,12 @@ public class UIScaleControllerTime : MonoBehaviour
             if (Screen.orientation == ScreenOrientation.Portrait)
             {
                 transform.localScale = Vector3.one * 1.7f;
-                rectTransform.anchoredPosition = new Vector2(57f, -262f);
+                rectTransform.anchoredPosition = new Vector2(0f, 600f);
             }
             else 
             {
                 transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(57f, -54f);
+                rectTransform.anchoredPosition = new Vector2(0f, 190f);
             }
 
     }

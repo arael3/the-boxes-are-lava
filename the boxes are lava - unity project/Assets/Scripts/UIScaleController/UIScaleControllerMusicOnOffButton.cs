@@ -13,31 +13,33 @@ public class UIScaleControllerMusicOnOffButton : MonoBehaviour
     }
     void Update()
     {
-        if (Screen.orientation == ScreenOrientation.Portrait)
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
+
+            if (Screen.orientation == ScreenOrientation.Portrait)
             {
-                transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(168f, 117f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one * 3f;
+                    rectTransform.anchoredPosition = new Vector2(168f, 117f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one * 3f;
+                    rectTransform.anchoredPosition = new Vector2(-121f, -1200f);
+                } 
             }
-            else
+            else 
             {
-                transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(-121f, -1200f);
-            } 
-        }
-        else 
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                transform.localScale = Vector3.one * 2f;
-                rectTransform.anchoredPosition = new Vector2(168f, 117f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one * 2f;
+                    rectTransform.anchoredPosition = new Vector2(168f, 117f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one;
+                    rectTransform.anchoredPosition = new Vector2(-121f, -5f);
+                }
             }
-            else
-            {
-                transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(-121f, -5f);
-            }
-        }
+
     }
 }

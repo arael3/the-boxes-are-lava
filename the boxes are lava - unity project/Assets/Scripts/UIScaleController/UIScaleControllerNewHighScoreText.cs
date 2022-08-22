@@ -12,15 +12,17 @@ public class UIScaleControllerNewHighScoreText : MonoBehaviour
     }
     void Update()
     {
-        if (Screen.orientation == ScreenOrientation.Portrait)
-        {
-            transform.localScale = Vector3.one * 1.7f;
-            rectTransform.anchoredPosition = new Vector2(317f, -95f);
-        }
-        else 
-        {
-            transform.localScale = Vector3.one;
-            rectTransform.anchoredPosition = new Vector2(408f, 21f);
-        }
+
+            if (Screen.orientation == ScreenOrientation.Portrait)
+            {
+                transform.localScale = Vector3.one * 1.7f;
+                rectTransform.anchoredPosition = new Vector2(317f, -95f);
+            }
+            else 
+            {
+                transform.localScale = Vector3.one;
+                rectTransform.anchoredPosition = new Vector2(408f, 21f);
+            }
+
     }
 }

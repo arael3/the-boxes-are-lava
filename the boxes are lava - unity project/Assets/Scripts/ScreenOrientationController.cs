@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class ScreenOrientationController : MonoBehaviour
 {
-    private void Update()
-    {
-        Debug.Log(Screen.orientation);
-    }
-
     public void ChangeScreenOrientation()
     {
         if (Screen.orientation == ScreenOrientation.Portrait)

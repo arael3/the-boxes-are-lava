@@ -13,31 +13,33 @@ public class UIScaleControllerChangeScreenOrientationButton : MonoBehaviour
     }
     void Update()
     {
-        if (Screen.orientation == ScreenOrientation.Portrait)
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
+
+            if (Screen.orientation == ScreenOrientation.Portrait)
             {
-                transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(-168, 117f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one * 3f;
+                    rectTransform.anchoredPosition = new Vector2(-168, 117f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one * 3f;
+                    rectTransform.anchoredPosition = new Vector2(125f, -1200f);
+                }
             }
             else
             {
-                transform.localScale = Vector3.one * 3f;
-                rectTransform.anchoredPosition = new Vector2(125f, -1200f);
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    transform.localScale = Vector3.one * 2f;
+                    rectTransform.anchoredPosition = new Vector2(-168, 117f);
+                }
+                else
+                {
+                    transform.localScale = Vector3.one;
+                    rectTransform.anchoredPosition = new Vector2(125f, -1.2f);
+                }
             }
-        }
-        else 
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                transform.localScale = Vector3.one * 2f;
-                rectTransform.anchoredPosition = new Vector2(-168, 117f);
-            }
-            else
-            {
-                transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(125f, -1.2f);
-            }
-        }
+   
     }
 }
