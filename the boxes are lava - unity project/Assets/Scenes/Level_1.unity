@@ -11208,6 +11208,7 @@ GameObject:
   - component: {fileID: 399660339}
   - component: {fileID: 399660338}
   - component: {fileID: 399660337}
+  - component: {fileID: 399660340}
   m_Layer: 5
   m_Name: Restart Button
   m_TagString: Untagged
@@ -11232,7 +11233,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 7.8}
+  m_AnchoredPosition: {x: 0, y: 8}
   m_SizeDelta: {x: 499.5, y: 136.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &399660337
@@ -11329,6 +11330,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 399660335}
   m_CullTransparentMesh: 1
+--- !u!114 &399660340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399660335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad968965005603b4db8d56e0dafa7f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &400133989 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4395751800859190421, guid: a2502206fa286dc4bac3d7c6659d827c, type: 3}
@@ -15930,6 +15943,7 @@ GameObject:
   - component: {fileID: 706299773}
   - component: {fileID: 706299772}
   - component: {fileID: 706299771}
+  - component: {fileID: 706299774}
   m_Layer: 5
   m_Name: 321 Start
   m_TagString: Untagged
@@ -15968,7 +15982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8967cec7e62683742b0ce647e80c27e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCountingValueRestart: 1.09
+  startCountingValueRestart: 3.99
 --- !u!114 &706299772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16066,6 +16080,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 706299769}
   m_CullTransparentMesh: 1
+--- !u!114 &706299774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706299769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7faad80a645028e4da2007ff0a659de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &714905125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36173,6 +36199,7 @@ GameObject:
   - component: {fileID: 1692816280}
   - component: {fileID: 1692816279}
   - component: {fileID: 1692816281}
+  - component: {fileID: 1692816282}
   m_Layer: 5
   m_Name: Game Over Text
   m_TagString: Untagged
@@ -36306,6 +36333,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b0d3cd7a2094e24492714165701d085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1692816282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692816277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bc630948b2a80c47b9f715c6a2b5a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1692879115 stripped

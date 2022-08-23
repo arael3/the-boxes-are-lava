@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIScaleControllerPauseButton: MonoBehaviour
+public class UIScaleControllerGameOverText : MonoBehaviour
 {
     RectTransform rectTransform;
 
@@ -15,13 +15,13 @@ public class UIScaleControllerPauseButton: MonoBehaviour
 
             if (Screen.orientation == ScreenOrientation.Portrait)
             {
-                transform.localScale = Vector3.one * 2f;
-                rectTransform.anchoredPosition = new Vector2(84f, -800f);
+                transform.localScale = Vector3.one * 1.7f;
+                rectTransform.anchoredPosition = new Vector2(0f, 400f);
             }
             else 
             {
                 transform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = new Vector2(63f, -197f);
+                rectTransform.anchoredPosition = new Vector2(0f, 168f);
             }
 
     }

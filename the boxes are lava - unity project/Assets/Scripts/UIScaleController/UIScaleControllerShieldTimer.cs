@@ -16,7 +16,7 @@ public class UIScaleControllerShieldTimer : MonoBehaviour
 		if (Screen.orientation == ScreenOrientation.Portrait)
 		{
 			transform.localScale = Vector3.one * 1.7f;
-			rectTransform.anchoredPosition = new Vector2(57f, -285f);
+			rectTransform.anchoredPosition = new Vector2(-70f, -285f);
 		}
 		else 
 		{
